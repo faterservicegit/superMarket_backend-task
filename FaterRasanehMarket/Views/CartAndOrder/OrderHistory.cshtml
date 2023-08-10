@@ -1,0 +1,124 @@
+﻿@model List<FaterRasanehMarket.Entities.Order>
+@using FaterRasanehMarket.Common
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    table.dataTable {
+        border-collapse: separate !important;
+        max-height: 50px;
+    }
+
+    .paginate_button {
+        color: black;
+        float: left;
+        padding: 8px 16px;
+        text-decoration: none;
+        cursor: pointer;
+        border: 1px solid #ddd;
+        direction: rtl;
+    }
+
+    .current {
+        background-color: dodgerblue;
+        color: white;
+    }
+</style>
+<link href="~/assets/plugins/datatables/dataTables.bootstrap4.css" rel="stylesheet" />
+<script src="~/assets/plugins/datatables/jquery.dataTables.js"></script>
+<script href="~/assets/plugins/datatables/dataTables.bootstrap4.js"></script>
+<script src="/Main/js/rater.min.js"></script>
+
+<div id="container">
+    <div class="container">
+        <!-- Breadcrumb Start-->
+        <ul class="breadcrumb">
+            <li><a href="/Home"><i class="fa fa-home"></i></a></li>
+            <li><a href="/CartAndOrder/OrderHistory">تاریخچه سفارشات</a></li>
+        </ul>
+        <!-- Breadcrumb End-->        <div class="row col-sm-9 col-lx-12 m-auto" style="float:inherit">
+            <div id="content row">
+                @if (ViewData.ModelState.IsValid.ToString() == "False")
+                {
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                }
+                @if (TempData["notification"] != null & ViewData.ModelState.IsValid.ToString() == "True")
+                {
+                    <div class="alert alert-success"><i class="fa fa-check-circle"></i> @TempData["notification"].ToString()</div>
+                }
+                @if (TempData["badnotification"] != null)
+                {
+                    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> @TempData["badnotification"].ToString()</div>
+                }
+                <div class="col-md-12 col-sm-12 collx-12 text-center">
+                    <span style="font-size:5rem">
+                        <i class="fa fa-history"></i>
+                    </span>
+                    <h2>تاریخچه سفارشات</h2>
+                </div>
+                <div class="table-responsive col-md-12" style="min-height:100%">
+                    @if (Model.Count > 0)
+                    {
+                        <table id="historyTable" class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <td class="text-center">ردیف</td>
+                                    <td class="text-center">شماره سفارش</td>
+                                    <td class="text-center">زمان سفارش</td>
+                                    <td class="text-center">هزینه پرداختی</td>
+                                    <td class="text-center">وضعیت سفارش</td>
+                                    <td class="text-center">جزئیات</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{int i = 0; }
+                                @foreach (var order in Model)
+                                {
+                                    <tr>
+                                        <td class="text-center" style="font-size:x-large">@(++i)</td>
+                                        <td class="text-center">@order.Id</td>
+                                        <td class="text-center">
+                                            @order.PaidDateTime.ConvertMiladiToShamsi("yyyy/MM/dd")
+                                        </td>
+                                        <td class="text-center">
+                                            @order.AmountPaid
+                                        </td>
+                                        <td class="text-center">
+                                            @order.OrderStatus.GetDisplayName()
+                                        </td>
+                                        <td class="text-right">
+                                            <a class="btn btn-warning" data-toggle="ajax-modal" data-url="@Url.Action("Factor","CartAndOrder",new {orderId=order.Id })" style="width:100%">فاکتور</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <div class="alert alert-info"><i class="fa fa-exclamation-circle"></i>تابحال از فروشگاه ما خریدی نکرده اید :( !</div>
+                    }
+                </div>
+            </div>
+            <!--Middle Part End -->
+        </div>
+    </div>
+</div>
+<script>
+    $('#historyTable').DataTable({
+        "language": {
+            "paginate": {
+                "next": "بعدی",
+                "previous": "قبلی"
+            }
+        },
+        "pageResize": true,
+        "info": false,
+        "paging": true,
+        "lengthChange": false,
+        "searching": false,
+        "ordering": false,
+        "autoWidth": true,
+        "pageLength": 10,
+    });
+</script>

@@ -1,0 +1,184 @@
+﻿@using FaterRasanehMarket.Services.Contracts;
+@using FaterRasanehMarket.ViewModels.Settings;
+@inject IWritableOptions<SiteSettings> writableLocations
+@model FaterRasanehMarket.ViewModels.CartAndOrders.CheckOutViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div id="container">
+    <div class="container">
+        <!-- Breadcrumb Start-->
+        <ul class="breadcrumb">
+            <li><a href="/Home"><i class="fa fa-home"></i></a></li>
+            <li><a href="/CartAndOrder/UserCart">سبد خرید</a></li>
+            <li><a href="/CartAndOrder/CheckOut">تسویه حساب</a></li>
+        </ul>
+        <!-- Breadcrumb End-->
+        @if (writableLocations.Value.OrderSettings.IsTakingOrder & Model.Cart.OrderDetails.Count() > 0)
+        {
+            <div class="row">
+                <!--Middle Part Start-->
+                <div id="content" class="col-sm-12">
+                    <h1 class="title">تسویه حساب</h1>
+                    <form asp-action="CheckOut" method="post">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                @await Component.InvokeAsync("UserAddresses")
+                            </div>
+                            <div class="col-sm-8">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title"><i class="fa fa-credit-card"></i> شیوه پرداخت</h4>
+                                            </div>
+                                            <div class="panel-body">
+                                                <p>لطفا شیوه پرداخت برای سفارش خود انتخاب کنید.</p>
+                                                @if (writableLocations.Value.OrderSettings.OfflinePayment)
+                                                {
+                                                    <div class="radio">
+                                                        <label>
+                                                            <input type="radio" value="1" asp-for="OrderPaymentMethod" checked="checked">
+                                                            پرداخت هنگام تحویل
+                                                        </label>
+                                                    </div>
+                                                }
+                                                @if (writableLocations.Value.OrderSettings.OnlinePayment)
+                                                {
+                                                    <div class="radio">
+                                                        <label>
+                                                            <input type="radio" value="2" asp-for="OrderPaymentMethod">
+                                                            پرداخت آنلاین
+                                                        </label>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title"><i class="fa fa-gift"></i> استفاده از کد تخفیف</h4>
+                                            </div>
+                                            <div class="panel-body">
+                                                <label for="input-voucher" class="col-sm-12 control-label">کد تخفیف را وارد کنید.</label>
+                                                <br />
+                                                <div class="input-group col-sm-12">
+                                                    <input type="text" class="form-control" asp-for="DiscountCode">
+                                                    @if (Model.DiscountCode == null)
+                                                    {
+                                                        <span class="input-group-btn">
+                                                            <input id="discount-buttom" type="button" class="btn btn-primary" data-loading-text="بارگذاری ..." value="اعمال کد تخفیف">
+                                                        </span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="input-group-btn">
+                                                            <input id="discount-buttom" type="button" class="btn btn-danger" data-loading-text="بارگذاری ..." value="حذف کد تخفیف">
+                                                        </span>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title"><i class="fa fa-shopping-cart"></i> سبد خرید</h4>
+                                            </div>
+                                            <div class="panel-body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <td class="text-center">تصویر</td>
+                                                                <td class="text-center">نام محصول</td>
+                                                                <td class="text-center">تعداد</td>
+                                                                <td class="text-center">قیمت واحد (ریال)</td>
+                                                                <td class="text-center">کل (ریال)</td>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach (var item in Model.Cart.OrderDetails)
+                                                            {
+                                                                <tr>
+                                                                    <td class="text-center"><a href="@Url.Action("ProductDetails", "Product", new { productId = item.Product.Id })"><img src="/Data/Product/Icon/@item.Product.Icon" alt="@item.Product.Name" title="@item.Product.Name" class="img-thumbnail cart-products" /></a></td>
+                                                                    <td class="text-center">
+                                                                        <a href="@Url.Action("ProductDetails", "Product", new { productId = item.Product.Id })">@item.Product.Name</a><br />
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <label class="text-center" style="font-size:x-large">@item.Count</label>
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        @item.Price.ToString("N0")
+                                                                        <br />
+                                                                        @if (item.Price != item.Product.Price)
+                                                                        {
+                                                                            <small>تخفیف : @((item.Product.Price - item.Price).ToString("N0")) </small>
+                                                                        }
+                                                                    </td>
+                                                                    <td class="text-center">@((item.Price * item.Count).ToString("N0"))</td>
+                                                                </tr>
+                                                            }
+                                                        </tbody>
+                                                        <tfoot>
+                                                            <tr>
+                                                                <td class="text-right" colspan="4"><strong>جمع کل:</strong></td>
+                                                                <td class="text-center">@Model.Cart.OrderPrice.ToString("N0")</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-right" colspan="4"><strong>هزینه ارسال:</strong></td>
+                                                                <td class="text-center">@(Model.Cart.ShippingCost != 0 ? $"{Model.Cart.ShippingCost.ToString("N0")}" : "رایگان")</td>
+                                                            </tr>
+                                                            @if (Model.Cart.DiscountAmount > 0)
+                                                            {
+                                                                <tr>
+                                                                    <td class="text-right" colspan="4"><strong>تخفیف :</strong></td>
+                                                                    <td class="text-center">@Model.Cart.DiscountAmount.ToString("N0")</td>
+                                                                </tr>
+                                                            }
+                                                            <tr>
+                                                                <td class="text-right" colspan="4"><strong>کل :</strong></td>
+                                                                <td class="text-center">@((Model.Cart.TotalPrice-Model.Cart.DiscountAmount).ToString("N0"))</td>
+                                                            </tr>
+                                                        </tfoot>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title"><i class="fa fa-pencil"></i> افزودن توضیح برای سفارش.</h4>
+                                            </div>
+                                            <div class="panel-body">
+                                                <textarea rows="4" class="form-control" asp-for="Description"></textarea>
+                                                <br>
+                                                <div class="buttons">
+                                                    <div class="pull-right">
+                                                        <input type="submit" class="btn btn-primary" id="button-confirm" value="تایید سفارش">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!--Middle Part End -->
+            </div>
+        }
+        else if (Model.Cart.OrderDetails.Count() == 0)
+        {
+            <div class="alert alert-info"><i class="fa fa-exclamation-circle"></i>  سبد خرید شما خالی می باشد!!!</div>
+        }
+        else
+        {
+            <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i>  با عرض پوزش فروشگاه درحال حاظر سفارش نمی گیرد</div>
+        }
+    </div>
+</div>

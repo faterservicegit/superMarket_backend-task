@@ -1,0 +1,45 @@
+﻿@{ Layout = null;}
+@using FaterRasanehMarket.Services.Contracts;
+@using FaterRasanehMarket.ViewModels.Settings;
+@inject IWritableOptions<SiteSettings> writableLocations
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <title>@writableLocations.Value.SiteInfo.Title</title>
+    <!-- Meta tag Keywords -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="application/x-javascript">
+         addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false);
+        function hideURLbar(){ window.scrollTo(0,1); } </script>
+    <!-- Meta tag Keywords -->
+    <!-- css files -->
+    <link href="~/assets/404/css/style.css" rel="stylesheet" type="text/css" media="all" />
+   <!-- //css files -->
+
+</head>
+<body>
+    <div class="overlay">
+        <div class="header">
+            <h1 style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">@writableLocations.Value.SiteInfo.Title</h1>
+        </div>
+        <div class="w3-main">
+            <div class="agile-info">
+                <h3>SORRY</h3>
+                <h2>4<img src="~/assets/404/images/confused.gif" alt="image" />4</h2>
+                <p>!!! صفحه درخواستی شما پیدا نشد</p>
+                <a href="/Admin/Dashboard">خانه</a>
+            </div>
+        </div>
+        <div class="footer-w3l">
+            <p>
+                &copy;
+                <script type="text/javascript">
+                document.write(new Date().getFullYear());
+                            <strong> <a href="@Context.Request.Host"> @writableLocations.Value.SiteInfo.Title </a></strong>
+                </script>2020. All rights reserved | Design by Gimemo
+            </p>
+        </div>
+    </div>
+</body>
+</html>

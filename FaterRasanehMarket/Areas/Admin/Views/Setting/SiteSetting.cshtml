@@ -1,0 +1,182 @@
+﻿
+@model FaterRasanehMarket.ViewModels.Settings.SettingsViewModel
+@{
+    ViewData["Title"] = "SiteSetting";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+    <style>
+        .avatar-zone {
+            width: 100%;
+            height: 100%;
+        }
+
+        .overlay-layer {
+            width: 100%;
+            height: 40px;
+            position: absolute;
+            opacity: 0.5;
+            background-color: #000000;
+            z-index: 0;
+            font-size: 25px;
+            color: #FFFFFF;
+            text-align: center;
+            line-height: 40px;
+            bottom: 0;
+        }
+
+        .customCenterd {
+            display: grid;
+            justify-content: center;
+            align-content: center;
+            max-width: 100%;
+            max-height: 100%
+        }
+
+        .upload_btn {
+            position: absolute;
+            width: 100%;
+            height: 80%;
+            z-index: 10;
+            opacity: 0;
+            cursor: pointer;
+        }
+    </style>
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">تنظیمات سایت</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-left">
+                        <li class="breadcrumb-item">تنظیمات</li>
+                        <li class="breadcrumb-item active">تنظیمات سایت</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <section class="content">
+        <div class="card shadow  w-100">
+            <div class="card-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="card shadow w-100">
+                            <form asp-action="SiteSetting" enctype="multipart/form-data">
+                                <div class="card-body">
+                                    @if (ViewData.ModelState.IsValid.ToString() == "False")
+                                    {
+                                        <div asp-validation-summary="All" class="alert alert-danger mb-4"></div>
+                                    }
+                                    @if (ViewBag.Alert != null)
+                                    {
+                                        <div class="alert alert-success alert-dismissable mb-4">
+                                            @ViewBag.Alert
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                    }
+                                    <div class="row mt-2 mb-2">
+                                        <div class="col-md-3 border-left">
+                                            <div class="col-md-12 text-center" style="min-height:50%">
+                                                <h5>
+                                                    تصویر لوگو
+                                                </h5>
+                                                <div class="customCenterd" data-provides="fileinput">
+                                                    <div class="avatar-zone">
+                                                        <label id="getlogoLabel" for="getlogo">
+                                                            <img id="logo" class="w-100 h-100 " src="~/Main/image/logo.png" style="max-height:150px;min-height:150px" />
+                                                        </label>
+                                                    </div>
+                                                    <input id="getlogo" onchange="readURL(this,'#logo')" asp-for="Logo" type="file" class="upload_btn" accept="image/*" />
+                                                    <span asp-validation-for="Logo" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <hr />
+                                            <div class="col-md-12 text-center">
+                                                <h5>
+                                                    تصویر فاویکن
+                                                </h5>
+                                                <div class="customCenterd" data-provides="fileinput">
+                                                    <div class="avatar-zone">
+                                                        <label id="getfavicoLabel" for="getfavico">
+                                                            <img id="favico" class="w-100 h-100 " src="~/Main/image/favicon.ico" style="max-height:100px" />
+                                                        </label>
+                                                    </div>
+                                                    <input id="getfavico" onchange="readURL(this,'#favico')" asp-for="Favicon" type="file" class="upload_btn" accept="image/*" />
+                                                    <span asp-validation-for="Favicon" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="form-group row">
+                                                <div class="col-md-3">
+                                                    <label asp-for="Title" class="control-label"></label>
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <input asp-for="Title" class="form-control" />
+                                                    <span asp-validation-for="Title" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-3">
+                                                    <label asp-for="Email" class="control-label"></label>
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <input asp-for="Email" class="form-control" />
+                                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-3">
+                                                    <label asp-for="PhoneNumber" class="control-label"></label>
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <input asp-for="PhoneNumber" class="form-control" />
+                                                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-3">
+                                                    <label asp-for="Address" class="control-label"></label>
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <textarea asp-for="Address" class="form-control" style="max-height:100px"></textarea>
+                                                    <span asp-validation-for="Address" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-3">
+                                                    <label asp-for="Description" class="control-label"></label>
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <textarea asp-for="Description" class="form-control" style="min-height:250px"></textarea>
+                                                    <span asp-validation-for="Description" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer clearfix">
+                                    <input type="submit" value="ویرایش اطلاعات" class="btn btn-block btn-outline-success btn-success float-left" />                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+
+
+

@@ -1,0 +1,15 @@
+﻿@{ Layout = null;}
+@using FaterRasanehMarket.Services.Contracts;
+@using FaterRasanehMarket.ViewModels.Settings;
+@inject IWritableOptions<SiteSettings> writableLocations
+<link href="~/assets/500/style.css" rel="stylesheet" />
+<body>
+    <div class="main">
+        <div class="Description">
+            <h1>@writableLocations.Value.SiteInfo.Title</h1>
+            <p>.سرور دچار مشکل شده لطفا با پشتیبانی تماس بگیرید</p>
+        </div>
+    </div>
+    <h1 class="internal"><span class="five">5</span><span class="zero">0</span><span class="zero">0</span></h1>
+</body>
+<footer class="link"><a href="@Context.Request.Host">2020. All rights reserved | Design by Gimemo</a></footer>

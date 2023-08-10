@@ -1,0 +1,271 @@
+﻿<style>
+    .selectize-control.single .selectize-input, .selectize-dropdown.singledropdown {
+        width: 200px !important;
+    }
+</style>
+<div id="toolbar" class="pl-1">
+    <div class="form-inline">
+        <div class="form-group">
+            <a href="@Url.Action("CreateOrUpdate")" class="btn btn-success"><i class="fa fa-plus"></i> افزودن کالا جدید </a>
+        </div>
+        <div class="form-group mr-1">
+            <button  type="button"  data-toggle="ajax-modal" data-url="@Url.Action("AddProductsWithExcel")" class="btn btn-primary"><i class="fa fa-plus"></i> افزودن فایل اکسل </button>
+        </div>
+        <div class="form-group mr-1">
+            <button type="button" class="btn btn-danger pl-1" data-toggle="ajax-modal" data-url="@Url.Action("DeleteGroup","Base")">
+                <i class="fa fa-trash"></i>|حذف گروهی
+            </button>
+        </div>
+        <div class="form-group mr-1">
+            <select id="categoryId">
+                <option value="0" selected>انتخاب دسته بندی</option>
+                <option value="99999999">تخفیف دار</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+
+<table id="table"
+       data-toolbar="#toolbar"
+       data-search="true"
+       data-show-refresh="true"
+       data-show-toggle="true"
+       data-show-fullscreen="false"
+       data-show-columns="true"
+       data-filter-control="true"
+       data-detail-view="true"
+       data-show-export="true"
+       data-click-to-select="true"
+       data-query-params="queryParams"
+       data-detail-formatter="detailFormatter"
+       data-minimum-count-columns="2"
+       data-show-pagination-switch="true"
+       data-pagination="true"
+       data-id-field="id"
+       data-page-list="[10, 25, 50, 100, all]"
+       data-show-footer="true"
+       data-side-pagination="server"
+       data-url="@Url.Action("GetProducts")"
+       data-response-handler="responseHandler">
+    <thead>
+        <tr>
+            <th data-field="id">ID</th>
+            <th data-field="price" data-filter-control="select">Item Price</th>
+        </tr>
+    </thead>
+</table>
+
+
+<script>
+    var $table = $('#table')
+    var selections = []
+
+    function get_query_params(p) {
+        return {
+            extraParam: 'abc',
+            search: p.title,
+            sort: p.sort,
+            order: p.order,
+            limit: p.limit,
+            offset: p.offset
+        }
+    }
+
+    function responseHandler(res) {
+        $.each(res.rows, function (i, row) {
+            row.state = $.inArray(row.id, selections) !== -1
+        })
+        return res
+    }
+    function likeformater(value, row, index) {
+        return [
+            '<a href="#" class="text-warning" title="امتیاز">', row.LikesPrecent,
+            ' <i class="fas fa-star" style="font-size: 1.2rem;"></i>',
+            '</a>'
+        ].join('')
+    }
+    function visitformater(value, row, index) {
+        return [
+            '<a href="#" class="text-danger" title="تعداد بازدید">', row.VisitCount,
+            ' <i class="fa fa-eye" style="font-size: 1.2rem;"></i>',
+            '</a >'
+        ].join('')
+    }
+    function priceformater(value, row, index) {
+        var html = []
+        if (row.DiscountedAmount != null) {
+            html.push('<a href="#" data-toggle="ajax-modal" data-url="@Url.Action("GetProductDiscounts")?productId=' + row.Id + '"><s class="text-danger">' + row.Price + '</s></a></br>')
+            html.push('<b>' + row.DiscountedAmount + '</b> ')
+        }
+        else {
+            html.push(row.Price)
+        }
+        return html.join('')
+    }
+    function detailFormatter(index, row) {
+        var html = []
+        $.each(row, function (key, value) {
+            if (key == "Icon" && value != null) {
+                var url = '@string.Format("{0}://{1}", Context.Request.Scheme, Context.Request.Host)' + '/Data/Product/Icon/' + value;
+                html.push('<p><b>آیکون:</b> <img src="' + url + '" height="80" />')
+            }
+            if (key == "تخفیف" && value != null) {
+                html.push('<p><b>' + key + ':</b> ' + value + ' %</p>')
+            }
+            if (key == "DiscountedAmount" && value != null) {
+                html.push('<p><b>قیمت با تخفیف:</b> ' + value + '</p>')
+            }
+            if (key == "Price" && value != null) {
+                html.push('<p><b>قیمت:</b> ' + value + '</p>')
+            }
+            if (key != "Icon" && key != "Id" && key != "ردیف" && key != "VisitCount" && key != "DiscountedAmount" && key != "Price" && key != "LikesPrecent" && key != "تخفیف"&& value != null)
+                html.push('<p><b>' + key + ':</b> ' + value + '</p>')
+        })
+        return html.join('')
+    }
+
+    function operateFormatter(value, row, index) {
+        return [
+            '<a  class=" text-success ml-2" href=@Url.Action("CreateOrUpdate")?ProductId=' + row.Id + ' title="ویرایش">',
+            '<i class="fa fa-edit"></i>',
+            '</a >',
+
+            '<a href="#" class=" text-danger" data-toggle="ajax-modal" data-url=@Url.Action("Delete")?ProductId=' + row.Id + ' title="حذف">',
+            '<i class="fa fa-trash"></i>',
+            '</a >'
+        ].join('')
+    }
+    function ProductImageFormatter(value, row, index) {
+        if (row.Icon != null)
+            return '<image src="/Data/Product/Icon/' + row.Icon + '" style="max-width:40px;max-height:40px" title="لوگو برند"/>';
+        else
+            return '<image src="/assets/dist/img/Product.png" style="max-width:40px;max-height:40px" title="لوگو برند"/>';
+    }
+    function checkBoxFormat(value, row) {
+        return '<input type="checkbox" name="btSelectItem" value="' + row.Id + '" />';
+    }
+
+
+    function totalTextFormatter(data) {
+        return 'تعداد'
+    }
+
+    function totalNameFormatter(data) {
+        return data.length
+    }
+
+        function initTable() {
+            $table.bootstrapTable('destroy').bootstrapTable({
+                //height: 600,
+                locale: 'fa-IR',
+                columns: [
+                    [{
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        formatter: checkBoxFormat
+                    },{
+                        title: 'ردیف',
+                        field: 'ردیف',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        footerFormatter: totalTextFormatter
+                    },{
+                        title: 'جزئیات کالا ها',
+                        colspan:10,
+                        align: 'center'
+                    }],
+                    [{
+                        field: 'Id',
+                        title: 'کد کالا',
+                        sortable: true,
+                        align: 'center'
+                    },{
+                        field: 'آیکون',
+                        title: 'آیکون',
+                        sortable: false,
+                        footerFormatter: totalNameFormatter,
+                        formatter: ProductImageFormatter,
+                        align: 'center'
+                    },{
+                        field: 'نام',
+                        title: 'نام',
+                        sortable: true,
+                        align: 'center'
+                        },{
+                            field: 'برند',
+                            title: 'برند',
+                            sortable: true,
+                            align: 'center'
+                        }, {
+                            field: 'دسته بندی',
+                            title: 'دسته بندی',
+                            sortable: false,
+                            align: 'center'
+                        },{
+                            field: 'قیمت',
+                            title: 'قیمت (ریال)',
+                            formatter: priceformater,
+                            sortable: true,
+                            align: 'center'
+                        },{
+                            field: 'موجودی',
+                            title: 'موجودی',
+                            sortable: true,
+                            align: 'center'
+                        },{
+                            field: 'بازدید',
+                            title: 'تعداد بازدید',
+                            formatter: visitformater,
+                            sortable: true,
+                            align: 'center'
+                        }, {
+                            field: 'امتیاز',
+                            title: 'امتیاز',
+                            formatter: likeformater,
+                            sortable: true,
+                            align: 'center'
+                        },{
+                        field: 'operate',
+                        title: 'عملیات',
+                        align: 'center',
+                        events: window.operateEvents,
+                        formatter: operateFormatter
+                    }]
+                ]
+            })
+        }
+        $(function () {
+            initTable()
+            $('#locale').change(initTable)
+        })
+    var $select= $('select').selectize({
+        onChange: function () {
+            $table.bootstrapTable('refresh');
+        }
+    });
+    function queryParams(params) {
+        params.categoryId = $('#categoryId').val();
+        return params
+    }
+    jQuery.ajax({
+        type: "get",
+        url: '@Url.Action("GetCategories")',
+        data: {},
+        success: function (result) {
+            var selectize = $select[0].selectize;
+            if (result.length>0) {
+                for (var i = 0; i < result.length; i++) {
+                    selectize.addOption({ value: result[i].id, text: result[i].name });
+                }
+            }
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
+</script>

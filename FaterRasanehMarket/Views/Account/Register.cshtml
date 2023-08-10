@@ -1,0 +1,79 @@
+﻿@model FaterRasanehMarket.ViewModels.Identity.RegisterViewModel
+@using FaterRasanehMarket.Services.Contracts;
+@using FaterRasanehMarket.ViewModels.Settings;
+@inject IWritableOptions<SiteSettings> writableLocations
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" href="/assets/login/images/bg-01.jpg" />
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/assets/login/css/util.css">
+    <link rel="stylesheet" type="text/css" href="/assets/login/css/main.css">
+    <!--===============================================================================================-->
+
+</head>
+<body>
+    <div class="limiter">
+        <div class="container-login100">
+            <div class="overlay">
+                <div class="wrap-login100">
+                    @if (ViewData.ModelState.IsValid.ToString() == "False")
+                    {
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                    }
+                    <div class="login100-form-title" style="background-image: url(/assets/login/images/Supermarket.jpg);">
+                        <span class="login100-form-title-1">
+                            @writableLocations.Value.SiteInfo.Title
+                        </span>
+                    </div>
+                    <form class="login100-form validate-form" asp-action="Register" method="post">
+                        <input hidden asp-for="ForgotPassword" />
+                        <div class="wrap-input100 validate-input m-b-26" data-validate="شماره موبایل را وارد کنید">
+                            <input class="input100" type="text" asp-for="PhoneNumber" placeholder="     شماره موبایل">
+                            <span class="focus-input100"></span>
+                        </div>
+                        @if (ViewData.ModelState.IsValid.ToString() == "True" & Model.ForgotPassword == false)
+                        {
+                            <div class="wrap-input100 validate-input m-b-26" data-validate="کد تایید را وارد کنید">
+                                <input class="input100" type="text" asp-for="ConfirmCode" placeholder="    کد تایید">
+                                <span class="focus-input100"></span>
+                            </div>
+                            <div class="container-login100-form-btn">
+                                <button class="login100-form-btn">
+                                    تایید
+                                </button>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="container-login100-form-btn" >
+                                <button class="login100-form-btn">
+                                    ارسال کد تایید
+                                </button>
+                            </div>
+                        }
+                    </form>
+                    <div class="text-center" style="width:100%">
+                        <a href="/Login">ورود به حساب کاربری</a>
+                        <br />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!--===============================================================================================-->
+    <script src="/assets/plugins/jquery/jquery.min.js"></script>
+    <script src="/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="/assets/login/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+﻿<div id="toolbar" class="pl-1">
+    <button type="button" data-toggle="ajax-modal" data-url="@Url.Action("RenderCategory")" class="btn btn-success"><i class="fa fa-plus"></i> افزودن دسته بندی جدید </button>
+    <button type="button" class="btn btn-danger pl-1" data-toggle="ajax-modal" data-url="@Url.Action("DeleteGroup","Base")">
+        <i class="fa fa-trash"></i>|حذف گروهی
+    </button>
+</div>
+
+<table id="table"
+       data-toolbar="#toolbar"
+       data-search="true"
+       data-show-refresh="true"
+       data-show-toggle="true"
+       data-show-fullscreen="false"
+       data-show-columns="true"
+       data-detail-view="false"
+       data-show-export="true"
+       data-click-to-select="true"
+       data-detail-formatter="detailFormatter"
+       data-minimum-count-columns="2"
+       data-show-pagination-switch="true"
+       data-pagination="true"
+       data-id-field="id"
+       data-page-list="[10, 25, 50, 100, all]"
+       data-show-footer="true"
+       data-side-pagination="server"
+       data-url="@Url.Action("GetCategories")"
+       data-response-handler="responseHandler">
+</table>
+
+
+<script>
+        var $table = $('#table')
+        var selections = []
+
+  function get_query_params(p) {
+    return {
+        extraParam: 'abc',
+        search: p.title,
+        sort: p.sort,
+        order: p.order,
+        limit: p.limit,
+        offset: p.offset
+    }
+}
+
+        function responseHandler(res) {
+            $.each(res.rows, function (i, row) {
+                row.state = $.inArray(row.id, selections) !== -1
+            })
+            return res
+        }
+
+    function operateFormatter(value, row, index) {
+        return [
+            '<a href="#" class="btn-link text-success mr-1" data-toggle="ajax-modal" data-url=@Url.Action("RenderCategory")?categoryId=' + row.Id + ' title="ویرایش">',
+            '<i class="fa fa-edit"></i>',
+            '</a >',
+            '<a href="#" class="btn-link text-danger mr-1" data-toggle="ajax-modal" data-url=@Url.Action("Delete")?categoryId=' + row.Id + ' title="حذف">',
+            '<i class="fa fa-trash"></i>',
+            '</a >'
+        ].join('')
+    }
+
+    function roleFormatter(value, row, index) {
+        if (value == null)
+            value = "بدون نقش";
+        return [
+            '<span class="badge badge-primary">' + value + '</span>'
+    ].join('')
+  }
+     function checkBoxFormat(value, row) {
+       return '<input type="checkbox" name="btSelectItem" value="' + row.Id + '" />';
+    }
+
+
+        function totalTextFormatter(data) {
+            return 'تعداد'
+        }
+
+    function totalNameFormatter(data) {
+            return data.length
+    }
+
+    function initTable() {
+        $table.bootstrapTable('destroy').bootstrapTable({
+            locale: 'fa-IR',
+            columns: [
+                [{
+                    field: 'state',
+                    checkbox: true,
+                    rowspan: 2,
+                    align: 'center',
+                    valign: 'middle',
+                    formatter: checkBoxFormat
+                }, {
+                    title: 'ردیف',
+                    field: 'ردیف',
+                    rowspan: 2,
+                    align: 'center',
+                    valign: 'middle',
+                    footerFormatter: totalTextFormatter
+                }, {
+                    title: 'جزئیات اطلاعات دسته بندی ها',
+                    colspan: 3,
+                    align: 'center'
+                }],
+                [{
+                    field: 'دسته',
+                    title: 'دسته',
+                    sortable: true,
+                    footerFormatter: totalNameFormatter,
+                    align: 'center'
+                }, {
+                    field: 'دسته پدر',
+                    title: 'دسته پدر',
+                    sortable: true,
+                    align: 'center'
+                }, {
+                    field: 'operate',
+                    title: 'عملیات',
+                    align: 'center',
+                    events: window.operateEvents,
+                    formatter: operateFormatter
+                }]
+            ]
+        })
+    }
+        $(function () {
+            initTable()
+            $('#locale').change(initTable)
+        })
+</script>

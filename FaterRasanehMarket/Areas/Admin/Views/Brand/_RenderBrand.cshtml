@@ -1,0 +1,103 @@
+﻿@model FaterRasanehMarket.ViewModels.Brand.BrandViewModel
+<style>
+    @@media only screen and (min-width: 700px) {
+        .modal-dialog {
+            max-width: 600px !important;
+        }
+    }
+
+    textarea {
+        overflow: auto;
+        resize: none;
+        min-height: 150px
+    }
+</style>
+<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                @if (Model.Id != 0)
+                {
+                    <h3 id="modal-title">ویرایش برند</h3>
+                }
+                else
+                {
+                    <h3 id="modal-title">افزودن برند جدید</h3>
+                }
+                <button type="button" class="close btn-link" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body clearfix">
+                <form asp-action="CreateOrUpdateBrand">
+                    @if (ViewData.ModelState.IsValid.ToString() == "False")
+                    {
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                    }
+                    <input name="IsValid" type="hidden" value="@ViewData.ModelState.IsValid.ToString()" />
+                    <input type="hidden" asp-for="Id" />
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <div class="fileinput fileinput-new" style="justify-content:center;display:grid" data-provides="fileinput">
+                                <label style="text-align:center" asp-for="ImageFile" class="control-label"></label>
+                                <span asp-validation-for="ImageFile" class="text-danger"></span>
+                                <div class="fileinput-new thumbnail">
+                                    @if (Model.Image != null)
+                                    {
+                                        <img id="img" src="~/Data/Brand/@Model.Image" style="max-width:200px" class="img-thumbnail" />
+                                        <input hidden asp-for="Image" />
+                                    }
+                                    else
+                                    {
+                                        <img id="img" src="~/assets/dist/img/Brand.png" style="max-width:200px" class="img-thumbnail" />
+                                    }
+                                </div>
+                                <div class="fileinput-preview fileinput-exists thumbnail"> </div>
+                                <div class="mr-2">
+                                    <span class="btn default btn-file">
+                                        <span class="fileinput-new btn btn-success"> انتخاب کنید </span>
+                                        <input onchange="readURL(this,'#img')" type="file" asp-for="ImageFile" accept=".jpg, .png, .jpeg, .gif, .tif, .tiff, .JPG" />
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-7">
+                            <div class="form-group row">
+                                <div class="col-md-3 mt-1">
+                                    <label asp-for="Name" class="control-label"></label>
+                                </div>
+                                <div class="col-md-9">
+                                    <input asp-for="Name" class="form-control" />
+                                </div>
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-12 mt-1">
+                                    <label asp-for="Description" class="control-label"></label>
+                                </div>
+                                <div class="col-md-12 ">
+                                    <textarea asp-for="Description" class="form-control">@Model.Description</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">بستن</button>
+                @if (Model.Id != 0)
+                {
+                    <button type="button" class="btn btn-sm btn-labeled btn-success mr-1" data-save="modal">
+                        ذخیره تغییرات
+                    </button>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-sm btn-labeled btn-success mr-1" data-save="modal">
+                        افزودن اطلاعات
+                    </button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

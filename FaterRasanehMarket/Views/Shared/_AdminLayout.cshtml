@@ -1,0 +1,252 @@
+﻿@using FaterRasanehMarket.Services.Contracts;
+@using FaterRasanehMarket.ViewModels.Settings;
+@inject IWritableOptions<SiteSettings> writableLocations
+@inject IApplicationUserManager userManager
+@{
+    Layout = null;
+    var user = await userManager.GetUserAsync(User);
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>پنل مدیریت @writableLocations.Value.SiteInfo.Title</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel='icon' href='~/Main/image/favicon.ico' type='image/x-icon' />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/assets/plugins/font-awesome/css/all.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/assets/dist/css/adminlte.css">
+    <!-- bootstrap rtl -->
+    <link rel="stylesheet" href="/assets/dist/css/bootstrap-rtl.min.css">
+    <!-- template rtl version -->
+    <link rel="stylesheet" href="/assets/dist/css/custom-style.css">
+    <link href="~/assets/plugins/bootstrap-table/dist/bootstrap-table.min.css" rel="stylesheet" />
+    <!-- jQuery -->
+    <script src="~/assets/plugins/jquery/jquery.min.js"></script>
+    <!-- Perload -->
+    <link href="~/assets/plugins/Loading/css/preloader.css" rel="stylesheet" />
+    <!-- SweetAlert -->
+    <link href="~/assets/plugins/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet" />
+    <link href="~/assets/plugins/Selectize/dist/css/selectize.default.css" rel="stylesheet" />
+    <link href="~/assets/plugins/toasty/toasty.css" rel="stylesheet" />
+    <script src="~/assets/plugins/Selectize/dist/js/standalone/selectize.min.js"></script>
+</head>
+<body class="hold-transition sidebar-mini">
+    <div class="preloader" style="height: 601px;"><div class="preloader-container" style="top: 300px;"><span class="preloader-text">لطفا صبر کنید...</span><div class="preloader-animation"></div></div></div>    <div class="wrapper">
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand bg-white navbar-light border-bottom">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#"><i class="far fa-bars"></i></a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="/Admin/Dashboard" class="nav-link">خانه</a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="#" id="closeopen-buttom" class="nav-link text-@(writableLocations.Value.OrderSettings.IsTakingOrder==true?"danger":"success") " title="@(writableLocations.Value.OrderSettings.IsTakingOrder==true?"عدم سفارشگیری":"شروع سفارشگیری")"><i class="fa fa-power-off"></i></a>
+                </li>
+            </ul>
+            <!-- Right navbar links -->
+            <ul class="navbar-nav mr-auto">
+                <!-- Exit Menu -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link" data-toggle="dropdown" onclick="Exit()" style="font-size:25px" href="#" title="خروج از حساب کاربری">
+                        <i class="fa fa-sign-out"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <!-- /.navbar -->
+        <!-- Main Sidebar Container -->
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <!-- Brand Logo -->
+            <a href="@Context.Request.Scheme://@Context.Request.Host" class="brand-link">
+                <img src="~/Main/image/logo.png" alt="SiteLogo" class="brand-image"
+                     style="opacity: .8">
+                <span class="brand-text font-weight-light">@writableLocations.Value.SiteInfo.Title</span>
+            </a>
+            <!-- Sidebar -->
+            <div class="sidebar" style="direction: ltr">
+                <div style="direction: rtl">
+                    <!-- Sidebar user panel (optional) -->
+                    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                        <div class="image">
+                            <img src="~/assets/dist/img/AdminLogo.png" class="img-circle elevation-2" alt="User Image">
+                        </div>
+                        <div class="info">
+                            <a href="#" class="d-block">@user.FirstName @user.LastName</a>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar Menu -->
+                    <nav class="mt-2">
+                        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                            <!-- Add icons to the links using the .nav-icon class
+                            with font-awesome or any other icon font library -->
+                            @if (TempData["State"] == null)
+                            {
+                                TempData["State"] = "none";
+                            }
+                            <li class="nav-item">
+                                <a href="/Admin" class="nav-link">
+                                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                                    <p>
+                                        داشبورد
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item has-treeview @(TempData["State"].ToString()=="user"?"menu-open":"")">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fa fa-user-edit"></i>
+                                    <p>
+                                        مدیریت کاربران
+                                        <i class="fa fa-angle-left right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="/Admin/User" class="nav-link">
+                                            <i class="fa fa-user-friends nav-icon"></i>
+                                            <p>کاربران</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/Admin/User/UserReports" class="nav-link">
+                                            <i class="fa fa-address-card nav-icon"></i>
+                                            <p>گزارشات کاربران</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li class="nav-item has-treeview @(TempData["State"].ToString()=="product"?"menu-open":"")">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-clipboard-list"></i>
+                                    <p>
+                                        مدیریت کالا ها
+                                        <i class="fa fa-angle-left right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="/admin/Product" class="nav-link">
+                                            <i class="nav-icon fas fa-box"></i>
+                                            <p>کالا ها</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/admin/Category" class="nav-link">
+                                            <i class="fas fa-boxes nav-icon"></i>
+                                            <p>دسته بندی ها</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/Admin/Brand" class="nav-link">
+                                            <i class="fas fa-briefcase nav-icon"></i>
+                                            <p>برند ها</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item has-treeview @(TempData["State"].ToString()=="discount"?"menu-open":"")">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fa fa-percent"></i>
+                                    <p>
+                                        مدیریت تخفیف ها
+                                        <i class="fa fa-angle-left right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="/admin/Discount" class="nav-link">
+                                            <span class="fa-stack fa-sm nav-icon">
+                                                <i class="fa fa-box fa-stack-2x nav-icon pr-2"></i>
+                                                <i class="fa fa-tag fa-stack-1x fa-inverse nav-icon pl-2"></i>
+                                            </span>
+                                            <p>تخفیف کالا ها</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/Admin/Discount/Codes" class="nav-link">
+                                            <i class="fa fa-gift nav-icon"></i>
+                                            <p>کد های تخفیف</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/Admin/Order" class="nav-link">
+                                    <i class="nav-icon fas fa-hand-holding-usd"></i>
+                                    <p>
+                                        مدیریت سفارشات
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-header">تنظیمات</li>
+                            <li class="nav-item">
+                                <a href="/Admin/Setting/SiteSetting" class="nav-link">
+                                    <i class="nav-icon fas fa-wrench"></i>
+                                    <p>
+                                        تنظیمات سایت
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/Admin/Setting/OtherSettings" class="nav-link">
+                                    <i class="nav-icon fas fa-cogs"></i>
+                                    <p>
+                                        سایر تنظیمات
+                                    </p>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <!-- /.sidebar-menu -->
+                </div>
+            </div>
+            <!-- /.sidebar -->
+        </aside>
+        <!-- Content Wrapper. Contains page content -->
+        <div id="modal-placeholder"></div>
+        @RenderBody()
+        <!-- /.content-wrapper -->
+        <footer class="main-footer">
+            <strong> <a href="@Context.Request.Scheme://@Context.Request.Host">@writableLocations.Value.SiteInfo.Title</a></strong>
+        </footer>
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+    </div>
+    <!-- ./wrapper -->
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script src="~/assets/plugins/jQueryUI/jquery-ui.min.js"></script>
+    <script>$.widget.bridge('uibutton', $.ui.button)</script>
+    <!-- Bootstrap 4 -->
+    <script src="/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap Table -->
+    <script src="/assets/plugins/bootstrap-table/dist/bootstrap-table.js"></script>
+    <script src="~/assets/plugins/bootstrap-table/dist/extensions/export/tableExport.js"></script>
+    <script src="~/assets/plugins/bootstrap-table/dist/bootstrap-table-locale-all.js"></script>
+    <script src="~/assets/plugins/bootstrap-table/dist/extensions/export/bootstrap-table-export.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="/assets/dist/js/adminlte.js"></script>
+    <script src="~/js/Ajax.js"></script>
+    <script src="~/assets/plugins/Loading/js/jquery.preloader.min.js"></script>
+    <script src="~/assets/plugins/sweetalert2/dist/sweetalert2.min.js"></script>
+    <script src="~/assets/plugins/toasty/toasty.js"></script>
+    <script src="~/assets/plugins/signalr/dist/browser/signalr.min.js"></script>
+    <script src="~/js/SignalrHandler.js"></script>
+    <script>
+        $(window).on('load', function () {
+            $(".preloader").remove();
+        });
+    </script>
+    @RenderSection("Scripts", false)
+</body>
+</html>

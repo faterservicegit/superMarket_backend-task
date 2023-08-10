@@ -1,0 +1,101 @@
+﻿@model FaterRasanehMarket.ViewModels.DashboardViewModel
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<link href="~/assets/plugins/Chart.js/Chart.min.css" rel="stylesheet" />
+<script src="~/assets/plugins/Chart.js/Chart.min.js"></script>
+<script src="~/assets/plugins/Chart.js/Chart.bundle.min.js"></script>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">داشبورد</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-left">
+                        <li class="breadcrumb-item"><a href="#">خانه</a></li>
+                        <li class="breadcrumb-item active">داشبورد</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <section class="content">
+        <div class="card shadow w-100">
+            <div class="card-body">
+                <div class="row">
+                    <!-- ./col -->
+                    <div class="col-lg-3 col-6 col-xs-12">
+                        <!-- small box -->
+                        <div class="small-box bg-warning-gradient" style="color:white">
+                            <div class="inner">
+                                <h3>@Model.UsersCount</h3>
+                                <p>کاربران</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-users"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-lg-3 col-6 col-xs-12">
+                        <!-- small box -->
+                        <div class="small-box bg-danger-gradient">
+                            <div class="inner">
+                                <h3>@Model.ProductsCount</h3>
+                                <p>محصولات</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-box"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-lg-3 col-6 col-xs-12">
+                        <!-- small box -->
+                        <div class="small-box bg-primary-gradient">
+                            <div class="inner">
+                                <h3>@Model.VisitsCount</h3>
+                                <p>بازدید</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-eye"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-lg-3 col-6 col-xs-12">
+                        <!-- small box -->
+                        <div class="small-box bg-success-gradient">
+                            <div class="inner">
+                                <h3>@Model.TodaySell.ToString("N0")</h3>
+                                <p>فروش امروز (ریال)</p>
+                            </div>
+                            <div class="icon">
+                                <i  class="fas fa-calculator"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @await Component.InvokeAsync("VisitsStatistics")
+            </div>
+        </div>
+    </section>
+</div>
+<script>
+    var nonExiPro ='@ViewBag.nonExistentProductsAlert';
+    var newOrAl='@ViewBag.NewOrdersAlert';
+    $(document).ready(function () {
+        if (nonExiPro != "")
+            setTimeout(function () {
+                toast.warning('<a style="z-index: 9999999;"  href="/admin/Product"><i class="fas fa-exclamation fa-2x"></i> ' + nonExiPro + '</a>');
+            }, 1000);
+        if (newOrAl != "")
+            setTimeout(function () {
+                toast.success('<a style="z-index: 9999999;"  href="/admin/Order"><i class="fa fa-check fa-2x"></i> ' + newOrAl+'</a>');
+            }, 2000);
+    });
+</script>

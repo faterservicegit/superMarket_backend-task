@@ -1,0 +1,421 @@
+﻿@model FaterRasanehMarket.ViewModels.Product.ProductViewModel
+@using FaterRasanehMarket.Common;
+@{
+    ViewData["Title"] = "RenderNews";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<link href="~/assets/plugins/dateTimePicker/css/persian-datepicker.min.css" rel="stylesheet" />
+<script src="~/assets/plugins/dateTimePicker/persian-date.min.js"></script>
+<script src="~/assets/plugins/dateTimePicker/persian-datepicker.min.js"></script>
+
+<style>
+    .btn-app {
+        display: flex !important;
+        border-radius: 3px;
+        position: relative;
+        padding: 10px 15px;
+        margin: 0 0 2px 10px;
+        min-width: 40px;
+        height: 35px;
+        text-align: center;
+        color: #666;
+        border: 1px solid #ddd;
+        background-color: #f4f4f4;
+        font-size: 12px;
+    }
+
+    .btn-squared-default {
+        width: 150px !important;
+        height: 150px !important;
+        font-size: 17px;
+    }
+
+        .btn-squared-default:hover {
+            border: 3px solid white;
+            font-weight: 800;
+        }
+
+    .btn-squared-default-plain {
+        width: 150px !important;
+        height: 150px !important;
+        font-size: 17px;
+        border: dotted;
+    }
+
+        .btn-squared-default-plain:hover {
+            border: 0px solid white;
+        }
+
+    .customCenterd {
+        display: grid;
+        justify-content: center;
+        align-content: center;
+        max-height: 100%;
+        margin: auto;
+    }
+
+    .avatar-zone {
+        width: 100%;
+        height: 100%;
+    }
+
+    .overlay-layer {
+        width: 100%;
+        height: 40px;
+        position: absolute;
+        opacity: 0.6;
+        background-color: #000000;
+        z-index: 0;
+        font-size: 20px;
+        color: #FFFFFF;
+        text-align: center;
+        line-height: 40px;
+        bottom: 0;
+    }
+
+    .upload_btn {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: 10;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .img-max-height {
+        max-height: 100%
+    }
+</style>
+
+<link href="~/assets/plugins/treeView/TreeView.css" rel="stylesheet" />
+<script src="~/assets/plugins/treeView/TreeView.js"></script>
+<script src="~/assets/plugins/tinymce/tinymce.min.js"></script>
+
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    @if (Model.Id != null)
+                    {
+                        <h1 class="m-0 text-dark">ویرایش کالا</h1>
+                    }
+                    else
+                    {
+                        <h1 class="m-0 text-dark">درج کالا</h1>
+                    }
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-left">
+                        <li class="breadcrumb-item">مدیریت کالا ها</li>
+                        @if (Model.Id != null)
+                        {
+                            <li class="breadcrumb-item active">ویرایش کالا</li>
+                        }
+                        else
+                        {
+                            <li class="breadcrumb-item active">درج کالا</li>
+                        }
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <section class="content">
+        <div class="card shadow  w-100">
+            <div class="card-body">
+                <div class="container-fluid">
+                    <div class="roW">
+                        <div class="card shadow w-100">
+                            <form asp-action="CreateOrUpdate" method="post" enctype="multipart/form-data">
+                                <input type="hidden" asp-for="Id" />
+                                <div class="card-body">
+                                    @if (ViewBag.Alert != null)
+                                    {
+                                        <div class="col-md-12">
+                                            <div class="alert alert-success mb-4 alert-dismissable">
+                                                @ViewBag.Alert
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    }
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="card mb-2">
+                                                <div class="card-header pt-2 pb-2 bg-light">دسته بندی</div>
+                                                <div class="card-body">
+                                                    <ul id="category" class="demo1">
+                                                        @foreach (var item in Model.ProductCategoriesViewModel.Categories)
+                                                        {
+                                                            <li>
+                                                                @if (Model.ProductCategoriesViewModel.CategoryIds != null)
+                                                                {
+                                                                    if (Model.ProductCategoriesViewModel.CategoryIds.Contains(item.id.ToString()))
+                                                                    {
+                                                                        <input type="checkbox" name="CategoryIds" value="@item.id" checked /> @item.title
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <input type="checkbox" name="CategoryIds" value="@item.id" /> @item.title
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input type="checkbox" name="CategoryIds" value="@item.id" /> @item.title
+                                                                }
+
+                                                                @{ Model.ProductCategoriesViewModel.Categories = item.subs;}
+                                                                @await Html.PartialAsync("_SubCategories", Model.ProductCategoriesViewModel)
+
+                                                            </li>
+                                                        }
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-9 border border-secondary">
+                                            <div class="col-md-12 row form-group mt-3">
+                                                <div class="col-md-6 row ">
+                                                    <div class="col-md-2 mt-2">
+                                                        <label asp-for="Name"></label>
+                                                    </div>
+                                                    <div class="col-md-9">
+                                                        <input asp-for="Name" class="form-control" placeholder="نام کالا" required />
+                                                        <span asp-validation-for="Name" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6  row mr-1">
+                                                    <div class="col-md-2 mt-2">
+                                                        <label asp-for="BrandId"></label>
+                                                    </div>
+                                                    <div class="col-md-9">
+                                                        <select asp-for="BrandId">
+                                                            @foreach (var brand in ViewBag.Brands as List<FaterRasanehMarket.Entities.Brand>)
+                                                            {
+                                                                if (Model.BrandId == null)
+                                                                {
+                                                                    <option value="0" selected>بدون برند</option>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <option value="0">بدون برند</option>
+                                                                }
+                                                                if (brand.Id == Model.BrandId)
+                                                                {
+                                                                    <option value="@brand.Id" selected>@brand.Name</option>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <option value="@brand.Id">@brand.Name</option>
+                                                                }
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-12 row">
+                                                <div class="col-md-5 row">
+                                                    <div class="col-md-3 mt-2">
+                                                        <label asp-for="Price"></label>
+                                                    </div>
+                                                    <div class="col-md-5 pt-1">
+                                                        <input onchange="updateDiscount(this)" asp-for="Price" class="form-control" placeholder="قیمت به ریال" required />
+                                                        <span asp-validation-for="Price" class="text-danger"></span>
+                                                    </div>
+                                                    <div class="col-md-4 row mt-2">
+                                                        <div id="addButton" style="display:@(Model.DiscountedAmount==null?"block":"none")">
+                                                            <button type="button" class="btn btn-app text-success" onclick="addOrRemoveDiscount()">
+                                                                <p>
+                                                                    <i class="fa fa-plus"></i>
+                                                                    درج تخفیف
+                                                                </p>
+                                                            </button>
+                                                        </div>
+                                                        <div id="removeButton" style="display:@(Model.DiscountedAmount!=null?"block":"none")">
+                                                            <button hidden type="button" class="btn btn-app text-danger" onclick="addOrRemoveDiscount()">
+                                                                <p>
+                                                                    <i class="fa fa-minus"></i>
+                                                                    حذف تخفیف
+                                                                </p>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3 row form-group">
+                                                    <div class="col-md-5 mt-2">
+                                                        <label asp-for="Count"></label>
+                                                    </div>
+                                                    <div class="col-md-7 row">
+                                                        <input asp-for="Count" class="form-control" placeholder="موجودی" />
+                                                        <span asp-validation-for="Count" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 row form-group">
+                                                    <div class="col-md-6 mt-2">
+                                                        <label asp-for="CountLimit"></label>
+                                                    </div>
+                                                    <div class="col-md-6 row">
+                                                        <input asp-for="CountLimit" class="form-control" placeholder="موجودی" />
+                                                        <span asp-validation-for="CountLimit" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="discountDiv" style="display:@(Model.DiscountedAmount!=null?"block":"none")" class="col-md-12 row form-group border border-warning mr-1">
+                                                <div class="callout callout-info">
+                                                    <p>این تخفیف فقط مختص این کالا می باشد و ممکن است قیمت نهایی کالا با اعمال تخفیف های گروهی کمتر از مقدار درج شده باشد</p>
+                                                </div>
+                                                <div class="col-md-3 row form-group">
+                                                    <label>قیمت با تخفیف</label>
+                                                    <input class="form-control" onchange="updateDiscount(this)" asp-for="DiscountedAmount" placeholder="مبلغ با تخفیف" />
+                                                </div>
+                                                <div class="col-md-2 row form-group mr-1">
+                                                    <label>درصد تخفیف</label>
+                                                    <input class="form-control" onchange="updateDiscount(this)" asp-for="DiscountPrecent" placeholder="درصد تخفیف" />
+                                                </div>
+                                                <div class="col-md-3 row form-group mr-1">
+                                                    <label>تاریخ شروع تخفیف</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">
+                                                                <i class="fa fa-calendar"></i>
+                                                            </span>
+                                                        </div>
+                                                        <input id="startDate" readonly asp-for="DiscountStartDateTime" class="form-control  pwt-datepicker-input-element" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3 row form-group mr-1">
+                                                    <label>تاریخ انقضا تخفیف</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">
+                                                                <i class="fa fa-calendar"></i>
+                                                            </span>
+                                                        </div>
+                                                        <input id="endDate" readonly asp-for="DiscountEndDateTime" class="form-control  pwt-datepicker-input-element" />
+                                                    </div>
+                                                </div>
+                                                <div class="row col-md-3 form-group mr-1" style="align-content:end">
+                                                    <input asp-for="IsInfiniteDiscount" />
+                                                    <label class="col-form-label mr-1" style="font-size:0.8rem">بدون تاریخ انقضا</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 form-group row mt-2">
+                                                <div class="col-md-5 border border-secondary">
+                                                    <div class="col-md-7  border border-dark p-1 mt-2 customCenterd" style="border:dotted !important">
+                                                        <div class="avatar-zone">
+                                                            <label id="getFileLabel" for="geticon">
+                                                                @if (Model.Icon != null)
+                                                                {
+                                                                    <img id="icon" class="w-100 h-100 " src="~/Data/Product/Icon/@Model.Icon" style="max-height:150px;min-height:150px" />
+                                                                    <input type="hidden" asp-for="Icon" />
+                                                                }
+                                                                else
+                                                                {
+                                                                    <img id="icon" class="w-100 h-100" src="~/assets/dist/img/Product.png" style="max-height:150px;min-height:150px" />
+                                                                }
+                                                            </label>
+                                                        </div>
+                                                        <input id="geticon" onchange="readURL(this,'#icon')" asp-for="IconFile" type="file" class="upload_btn" accept="image/*" />
+                                                        <label asp-for="IconFile" class="overlay-layer"></label>
+                                                    </div>
+                                                    <div class="col-md-12 row form-group">
+                                                        @for (int i = 0; i < 4; i++)
+                                                        {
+                                                            var get = "getscr" + i;
+                                                            var scr = "scr" + i;
+                                                            var input = scr + "in";
+                                                            <div class="col-md-6 border border-dark p-2 customCenterd" style="border:dotted !important">
+                                                                <div class="avatar-zone">
+                                                                    <label for="@get ">
+                                                                        @if (Model.ImagesName.Count > i)
+                                                                        {
+                                                                            <input id="@input" type="hidden" asp-for="ImagesName" value="@Model.ImagesName[i]" />
+                                                                            <img id="@scr" class="w-100 h-100" src="~/Data/Product/Images/@Model.ImagesName[i]" style="max-height:150px;min-height:150px" />
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <img id="@scr" class="w-100 h-100" src="~/assets/dist/img/Product@(i+1).png" style="max-height:150px;min-height:150px" />
+                                                                        }
+                                                                    </label>
+                                                                </div>
+                                                                <input id="@get" onchange="readURL(this,@scr)" asp-for="ImageFiles" type="file" class="upload_btn" accept="image/*" />
+                                                                <label asp-for="ImageFiles" class="overlay-layer"></label>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-7">
+                                                    <label asp-for="Description"></label>
+                                                    <textarea id="mytextarea" asp-for="Description" style="resize:none"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 form-group">
+                                                <button class="btn btn-block btn-outline-info" type="submit">ثبت</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<script>
+    var discountelement = null;
+    //tinymce
+    tinymce.init({
+        selector: '#mytextarea',
+        height: 500,
+        plugins: 'preview ',
+        toolbar1: 'formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat |fullscreen',
+        language: 'fa_IR',
+        directionality: 'rtl'
+    });
+    $('select').selectize();
+    //treeView
+    $('.demo1').bonsai();
+    $('#startDate').persianDatepicker({
+       @(Model.DiscountPrecent==null?"minDate: new persianDate().valueOf(),":"")
+        format: 'YYYY/MM/DD',
+        initialValueType: 'persian',
+        autoClose: true
+    });
+    $('#endDate').persianDatepicker({
+        format: 'YYYY/MM/DD',
+        initialValueType: 'persian',
+        @(Model.DiscountPrecent==null?"minDate: new persianDate().valueOf(),":"")
+        @(Model.IsInfiniteDiscount == true ? "initialValue: false,":"")
+        autoClose: true
+    });
+    function addOrRemoveDiscount() {
+        var x = document.getElementById("discountDiv");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+            document.getElementById("removeButton").style.display= "block";
+            document.getElementById("addButton").style.display = "none";
+        } else {
+            document.getElementById("DiscountedAmount").value =null;
+            x.style.display = "none";
+            document.getElementById("removeButton").style.display = "none";
+            document.getElementById("addButton").style.display = "block";
+        }
+    }
+    function updateDiscount(obj) {
+        if (obj.id == "DiscountedAmount") {
+            document.getElementById("DiscountPrecent").value = ((1 - (obj.value / document.getElementById("Price").value)) * 100).toFixed(0);
+            discountelement = obj
+        }
+        if (obj.id == "DiscountPrecent") {
+            document.getElementById("DiscountedAmount").value = document.getElementById("Price").value - (document.getElementById("Price").value * (obj.value / 100));
+            discountelement = obj;
+        }
+        if (obj.id == "Price" & discountelement != null) {
+            updateDiscount(discountelement);
+        }
+    }
+</script>

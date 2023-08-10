@@ -1,0 +1,153 @@
+﻿@model FaterRasanehMarket.Entities.Order
+@using FaterRasanehMarket.Common
+<style>
+
+    @@media only screen and (min-width: 800px) {
+        .modal-dialog {
+            min-width: 800px !important;
+        }
+    }
+
+    .caption {
+        display: none !important
+    }
+
+    .clear-rating {
+        display: none !important
+    }
+
+    .rating-sm {
+        width: 100%;
+    }
+
+    .checked {
+        color: orange;
+    }
+</style>
+<link href="~/assets/plugins/Rating/css/star-rating.min.css" rel="stylesheet" />
+<link href="~/assets/plugins/Rating/themes/krajee-fa/theme.min.css" rel="stylesheet" />
+<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="modal-title"> فاکتور سفارش</h4>
+            </div>
+            <div class="modal-body clearfix">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <td class="text-center">ردیف</td>
+                                <td class="text-center">نام محصول</td>
+                                <td class="text-center"> امتیاز @(ViewBag.IsPanel == false? "شما" : "مشتری")</td>
+                                <td class="text-center">تعداد</td>
+                                <td class="text-center">قیمت واحد(ریال)</td>
+                                <td class="text-center">کل(ریال)</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{ int i = 0;}
+                            @foreach (var item in Model.OrderProducts)
+                            {
+                                var score = item.Product.Likes.Where(t => t.UserId == int.Parse(User.Identity.GetUserId())).Select(t => t.LikeNumber).FirstOrDefault();
+                                <tr>
+                                    <td class="text-center"><label style="font-size:large">@(++i)</label></td>
+                                    <td class="text-center">
+                                        <a href="@Url.Action("ProductDetails", "Product", new { productId = item.Product.Id })">@item.Product.Name</a><br />
+                                    </td>
+                                    <td class="text-center">
+                                        @if (ViewBag.IsPanel == false)
+                                        {
+                                            <input id="@item.Id" @(score != 0 ? "readonly" : "") value="@score" type="text" class="kv-fa rating rating-animate col-md-12" data-min="0" data-max="5" data-size="sm" data-rtl="true" data-step="1">
+                                        }
+                                        else
+                                        {
+                                            <p>
+                                                @for (int j = 1; j < 6; j++)
+                                                {
+                                                    <span class="fa"><i class="fa fa-star @(score >= j ? "checked" : "") "></i></span>
+                                                }
+                                            </p>
+                                        }
+                                    </td>
+                                    <td class="text-center">
+                                        <label class="text-center">@item.Count</label>
+                                    </td>
+                                    <td class="text-center">
+                                        @item.Price.ToString("N0")
+                                    </td>
+                                    <td class="text-center">@((item.Price * item.Count).ToString("N0")) </td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="4">
+                                    @if (Model.Address != null)
+                                    {
+                                        <strong>آدرس ارسال سفارش :</strong>
+                                    }
+                                    else
+                                    {
+                                        <strong>آدرس سفارش حذف شده است.</strong>
+                                    }
+                                </td>
+                                <td class="text-right"><strong>جمع کل:</strong></td>
+                                <td class="text-center">@((Model.AmountPaid-Model.ShippingCost + (Model.Discount!=null? ((Model.AmountPaid - Model.ShippingCost) * Model.Discount.Percent) / (100 - Model.Discount.Percent):0)).ToString("N0")) </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="border:none">@Model.Address?.FullAddress</td>
+                                <td class="text-right"><strong>تخفیف :</strong></td>
+                                <td class="text-center">@(((int)(Model.Discount!=null?(((Model.AmountPaid - Model.ShippingCost) * Model.Discount?.Percent) / (100 - Model.Discount?.Percent)): 0)).ToString("N0"))</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="border:none">
+                                    @(Model.Address!=null? $"شماره تماس : {Model.Address?.PhoneNumber}" : "")
+                                </td>
+                                <td class="text-right"><strong>هزینه ارسال:</strong></td>
+                                <td class="text-center">@(Model.ShippingCost != 0 ? $"{Model.ShippingCost.ToString("N0")} " : "رایگان")</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="border:none">زمان تحویل سفارش : @(Model.ShipDateTime!=null?Model.ShipDateTime.ConvertMiladiToShamsi("yyyy/MM/dd HH:mm"):"بعد از تایید سفارش زمان تحویل مشخص می گردد") </td>
+                                <td class="text-right"><strong>پرداختی :</strong></td>
+                                <td class="text-center">@Model.AmountPaid.ToString("N0") </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="/assets/plugins/Rating/js/star-rating.js"></script>
+<script type="text/javascript" src="/assets/plugins/Rating/js/locales/fa.js"></script>
+<script type="text/javascript" src="/assets/plugins/Rating/themes/krajee-fa/theme.min.js"></script>
+@if (ViewBag.IsPanel == false)
+{
+    <script>
+
+        $('.kv-fa').rating({
+            theme: 'krajee-fa',
+            filledStar: '<i class="fa fa-star"></i>',
+            emptyStar: '<i class="fa fa-star-o"></i>',
+        });
+    </script>
+    @foreach (var item in Model.OrderProducts)
+    {
+        <script>
+    $('#@(item.Id)').on('rating:change', function (event, value) {
+        $.ajax({
+            url: '/Product/RegisterProducScores?productId=' + @item.Product.Id+'&score=' + value,
+            error: function (Result) {
+                FaildAlert(Result.responseText);
+            }
+        }).done(function (Result) {
+            SuccessAlert(Result);
+            $('#@(item.Id)').rating('refresh', {
+                disabled: true,
+            });
+        });
+    });
+        </script>
+    }
+}

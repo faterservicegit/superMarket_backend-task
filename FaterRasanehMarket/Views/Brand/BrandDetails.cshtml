@@ -1,0 +1,75 @@
+﻿@model List<FaterRasanehMarket.ViewModels.Product.ProductViewModel>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/assets/plugins/Selectize/dist/css/selectize.default.css" rel="stylesheet" />
+<div id="container">
+    <div class="container">
+        <!-- Breadcrumb End-->
+        <div class="row">
+            <!--Middle Part Start-->
+            <div class="col-md-12 col-sm-12 row border">
+                <h1 class="text-center">
+                    @ViewBag.Brand.Name
+                </h1>
+                <div class="col-md-3 dis-flex">
+                    <img class="product-icon m-auto" src="~/Data/Brand/@ViewBag.Brand.Image" />
+                </div>
+                @if (ViewBag.Brand.Description!=null)
+                {
+                    <div class="col-md-8">
+                        <h3>توضیحات</h3>
+                        <p>@ViewBag.Brand.Description</p>
+                    </div>
+                }
+            </div>
+            <div id="content" class="col-sm-12 pt-2">
+                <div class="product-filter">
+                    <div class="row">
+                        <div class="col-md-3 col-sm-4">
+                            <div class="btn-group">
+                                <button type="button" id="list-view" class="btn btn-default" data-toggle="tooltip" title="لیست"><i class="fa fa-th-list"></i></button>
+                                <button type="button" id="grid-view" class="btn btn-default" data-toggle="tooltip" title="پیشفرض"><i class="fa fa-th"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                @if (Model.Count > 0)
+                {
+                    <div id="ProductPaginate" class="row products-category">
+                        @await Html.PartialAsync("_BrandProductsPagination", Model)
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 text-right">
+                            <div id="page">
+                                <ul class="pagination"></ul>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <h3 class="text-center text-danger">محصولی برای این برند وجود ندارد</h3>
+                }
+            </div>
+            <!--Middle Part End -->
+        </div>
+    </div>
+</div>
+<script src="~/assets/plugins/Selectize/dist/js/standalone/selectize.min.js"></script>
+<script src="~/Main/js/pagination.min.js"></script>
+<script>
+    	$('#page').Pagination({
+            size: @ViewBag.Count,
+            limit: 20,
+    	}, function(obj){
+              var offset=(obj.page-1)*20;
+              $.ajax({
+             url: '/Brand/BrandDetails?offset=' + offset + '&&limit=' + 20+'&&brandId='+@ViewBag.Brand.Id ,
+             }).done(function (result) {
+                 $("#ProductPaginate").html(result);
+             });
+    	});
+</script>
+

@@ -1,0 +1,52 @@
+﻿@model FaterRasanehMarket.ViewModels.CartAndOrders.CartViewModel
+    <button type="button" data-toggle="dropdown" class="heading dropdown-toggle"> <span class="fas fa-shopping-cart pull-left flip" style="font-size:2rem"></span> <span id="cart-total">
+       @(Model.OrderDetails!=null && Model.OrderDetails?.Count() != 0 ? $"{Model.OrderDetails.Count()} آیتم - {Model.TotalPrice} ریال":"سبد خریدت خالیه :(")</span></button>
+    <ul class="dropdown-menu">
+        @if (Model.OrderDetails != null&Model.OrderDetails?.Count()>0)
+        {
+            <li>
+                <table class="table">
+                    <tbody>
+                        @foreach (var item in Model.OrderDetails)
+                        {
+                            <tr>
+                                <td class="text-center"><a href="@Url.Action("ProductDetails","Product",new {productId=item.Product.Id })"><img class="img-thumbnail cart-products" title="@item.Product.Name" alt="@item.Product.Name" src="/Data/Product/Icon/@item.Product.Icon"></a></td>
+                                <td class="text-left"><a href="@Url.Action("ProductDetails","Product",new {productId=item.Product.Id })">@item.Product.Name</a></td>
+                                <td class="text-right">x @item.Count</td>
+                                <td class="text-right">@item.Price ریال</td>
+                                <td class="text-center"><button class="btn btn-danger btn-xs remove" title="حذف" onClick="removeFromCart(this)" url="@Url.Action("RemoveOrUpdateFromCart","CartAndOrder",new {productId=item.Product.Id })" type="button"><i class="fa fa-times"></i></button></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </li>
+            <li>
+                <div>
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="text-right"><strong>جمع کل</strong></td>
+                                <td class="text-right">@Model.OrderPrice ریال</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><strong>هزینه ارسال</strong></td>
+                                <td class="text-right">@(Model.ShippingCost==0?"رایگان":$"{Model.ShippingCost} ریال")</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><strong>قابل پرداخت</strong></td>
+                                <td class="text-right">@Model.TotalPrice ریال</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p class="checkout"><a href="@Url.Action("UserCart","CartAndOrder")" class="btn btn-primary"><i class="fa fa-shopping-cart"></i> مشاهده سبد</a>&nbsp;&nbsp;&nbsp;<a href="@Url.Action("CheckOut","CartAndOrder")" class="btn btn-primary"><i class="fa fa-share"></i> تسویه حساب</a></p>
+                </div>
+            </li>
+        }
+        else
+        {
+            <li>
+                <h4 class="text-danger text-center">سبد خرید شما خالی است</h4>
+            </li>
+        }
+    </ul>
+

@@ -1,0 +1,37 @@
+﻿@using FaterRasanehMarket.Services.Contracts;
+@using FaterRasanehMarket.ViewModels.Settings;
+@inject IWritableOptions<SiteSettings> writableLocations
+@{
+    ViewData["Title"] = "AboutUs";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!--Middle Part Start-->
+<div id="content" class="col-sm-12" style="padding:5rem;background-color:white">
+    <h1 class="title">تماس با ما</h1>
+    <div class="row">
+        <div class="col-sm-5"><img src="/Main/image/aboutUs.jpg" alt="قالب مارکت شاپ" title="قالب مارکت شاپ" class="img-thumbnail"></div>
+        <div class="col-sm-3">
+            <strong>آدرس فروشگاه</strong><br>
+            <address>
+                @writableLocations.Value.SiteInfo.Address
+            </address>
+        </div>
+        <div class="col-sm-4">
+            <strong>شماره تماس</strong><br>
+            @writableLocations.Value.SiteInfo.PhoneNumber<br>
+            <br>
+            <strong>ایمیل</strong><br>
+            <a href="mailto:@writableLocations.Value.SiteInfo.Email">@writableLocations.Value.SiteInfo.Email</a>
+        </div>
+    </div>
+    <hr/>
+    <h2 class="title">درباره ما</h2>
+    <div class="row">
+        <div class="col-sm-10">
+            <p> @writableLocations.Value.SiteInfo.Description</p>
+        </div>
+    </div>
+
+</div>
+<!--Middle Part End -->

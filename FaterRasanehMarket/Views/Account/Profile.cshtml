@@ -1,0 +1,203 @@
+﻿@model FaterRasanehMarket.ViewModels.Profile.ProfileViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .radio-group {
+        position: relative;
+    }
+
+    .radio {
+        padding: 10px 20px;
+        display: flex;
+        -moz-box-align: center;
+        align-items: center;
+        -moz-box-pack: justify;
+        justify-content: space-between;
+        border-radius: 5px;
+        background-color: rgba(255, 253, 253, 0.07);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-top-color: rgba(0, 0, 0, 0.1);
+        border-right-color: rgba(0, 0, 0, 0.1);
+        border-bottom-color: rgba(0, 0, 0, 0.1);
+        border-left-color: rgba(0, 0, 0, 0.1);
+        color: black;
+        margin-bottom: 10px;
+        transition: all 0.3s ease 0.1s;
+        cursor: pointer;
+    }
+
+    .buttons {
+        border-top: 1px solid #EEEEEE;
+        overflow: hidden;
+        padding: 15px 6px 0px 6px;
+        margin-bottom: 20px;
+    }
+
+    .radio.selected {
+        border-color: blue;
+        background-color: #cfe6ff3d;
+    }
+</style>
+<div id="container">
+    <div class="container">
+        <!-- Breadcrumb Start-->
+        <ul class="breadcrumb">
+            <li><a href="/Home"><i class="fa fa-home"></i></a></li>
+            <li><a href="/Account/Profile">حساب کاربری</a></li>
+        </ul>
+        <!-- Breadcrumb End-->
+        <div class="row col-sm-9 col-lx-12 m-auto" style="float:inherit">
+            <div id="content row">
+                @if (ViewData.ModelState.IsValid.ToString() == "False")
+                {
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                }
+                @if (TempData["notification"] != null & ViewData.ModelState.IsValid.ToString() == "True")
+                {
+                    <div class="alert alert-success"><i class="fa fa-check-circle"></i> @TempData["notification"].ToString()</div>
+                }
+                @if (TempData["badnotification"] != null)
+                {
+                    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> @TempData["badnotification"].ToString()</div>
+                }
+                <div class="col-md-12 col-sm-12 collx-12 text-center">
+                    <span style="font-size:5rem">
+                        <i class="fa fa-user"></i>
+                    </span>
+                    <h2>حساب کاربری</h2>
+                </div>
+                <form class=" col-md-12 col-sm-12" asp-action="Profile" autocomplete="off" method="post">
+                    <fieldset id="account">
+                        <legend>اطلاعات شخصی شما</legend>
+                        <div class="form-group">
+                            <div class="col-sm-6 form-group">
+                                <input asp-for="FirstName" class="form-control" placeholder="نام خود را وارد کنید">
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                <input asp-for="LastName" class="form-control" placeholder="نام خانوادگی خود را وارد کنید">
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-6 form-group">
+                                <input asp-for="Email" type="email" class="form-control" placeholder="ایمیل  خود را وارد کنید">
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                <input asp-for="PhoneNumber" readonly type="text" class="form-control" placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div id="changePasswordBtn" class="form-group col-sm-12">
+                                <a onclick="changePassword()" class="small hov-pointer" @(Model.PasswordProblem == false ? "" : "hidden")>تغییر کلمه عبور</a>
+                            </div>
+                            <div id="changePassword" @(Model.PasswordProblem == false ? "hidden" : "")>
+                                <div class="col-sm-4 form-group">
+                                    <input asp-for="OldPassword" type="password" class="form-control" placeholder="کلمه عبور قبلی خود را وارد کنید">
+                                    <span asp-validation-for="OldPassword" class="text-danger"></span>
+                                </div>
+                                <div class="col-sm-4 form-group">
+                                    <input asp-for="Password" type="password" class="form-control" placeholder="کلمه عبور جدید را وارد کنید">
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+                                <div class="col-sm-4 form-group">
+                                    <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="تکرار کلمه عبور جدید را وارد کنید">
+                                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button class="form-control btn btn-primary" type="submit">ذخیره تغییرات</button>
+                        </div>
+                    </fieldset>
+                </form>
+                <div class="col-md-12 col-sm-12 collx-12 text-center">
+                    <span style="font-size:5rem">
+                        <i class="fa fa-location"></i>
+                    </span>
+                    <h3>انتخاب آدرس</h3>
+                </div>
+                <fieldset class="col-md-12">
+                    <legend>آدرس ها</legend>
+                    <div class="radio-group">
+                        @foreach (var address in Model.Addresses)
+                        {
+
+                            <div class='radio col-12 @(address.IsDefualt==true?"selected":"")' data-value="@address.Id">
+                                <div class="address col-md-9">
+                                    <label>
+                                        <big>@address.Title</big>
+                                        <br />
+                                        <span>@address.FullAddress</span>
+                                        <br />
+                                        <small>@address.PhoneNumber</small>
+                                    </label>
+                                </div>
+                                <div class="buttons">
+                                    <button onclick="editAddress(@address.Id)" class="text-success" style="background-color:transparent;border:none"><span class="fa fa-edit" style="vertical-align: middle;"></span></button>
+                                    <button onclick="deleteAddress(@address.Id)" class="text-danger" style="background-color:transparent;border:none"><span class="fa fa-trash" style="vertical-align: middle;"></span></button>
+                                </div>
+                            </div>
+
+                            <div id="@address.Id" hidden class="col-md-12 pt-2" style=" border: 1px solid rgba(0, 0, 0, 0.1); ">
+                                <form asp-action="RenderAddress" method="post">
+                                    <input hidden name="Id" value="@address.Id" />
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="col-sm-6 form-group">
+                                                <input type="text" name="Title" class="form-control" placeholder="عنوان آدرس را وارد کنید" value="@address.Title">
+                                            </div>
+                                            <div class="col-sm-6 form-group">
+                                                <input type="text" name="PhoneNumber" class="form-control" placeholder=" شماره تماس را وارد کنید" value="@address.PhoneNumber">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group col-md-12">
+                                            <textarea type="text" class="form-control" name="FullAddress" placeholder=" آدرس را وارد کنید">@address.FullAddress</textarea>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-success" type="submit" style="margin-bottom:1rem;">ثبت تغییرات</button>
+                                </form>
+                            </div>
+                        }
+                    </div>
+                    @if (Model.Addresses?.Count < 3)
+                    {
+                        <div class="radio-group ">
+                            <div class=" col-md-12 pt-2" style=" border: 1px solid rgba(0, 0, 0, 0.1); ">
+                                <h4> افزودن آدرس جدید</h4>
+                                <form asp-action="RenderAddress" method="post">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="col-sm-6 form-group">
+                                                <input type="text" name="Title" class="form-control" placeholder="عنوان آدرس را وارد کنید" />
+                                            </div>
+                                            <div class="col-sm-6 form-group">
+                                                <input type="text" name="PhoneNumber" class="form-control" placeholder=" شماره تماس را وارد کنید" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group col-md-12">
+                                            <textarea type="text" class="form-control" name="FullAddress" placeholder=" آدرس را وارد کنید"></textarea>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-success mb-2" type="submit" style="margin-bottom:1rem;">افزودن آدرس</button>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                </fieldset>
+            </div>
+            <!--Middle Part End -->
+        </div>
+    </div>
+</div>
+<script>
+ function changePassword() {
+        $('#changePasswordBtn').toggle();
+        $('#changePassword').toggle();
+    };
+</script>

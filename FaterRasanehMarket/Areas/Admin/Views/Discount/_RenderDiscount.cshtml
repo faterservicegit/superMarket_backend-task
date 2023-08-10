@@ -1,0 +1,158 @@
+﻿@model FaterRasanehMarket.ViewModels.Discount.DiscountViewModel
+<link href="~/assets/plugins/dateTimePicker/css/persian-datepicker.min.css" rel="stylesheet" />
+<script src="~/assets/plugins/dateTimePicker/persian-date.min.js"></script>
+<script src="~/assets/plugins/dateTimePicker/persian-datepicker.min.js"></script>
+<style>
+</style>
+<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                @if (Model.Id != 0)
+                {
+                    <h3 id="modal-title">ویرایش تخفیف</h3>
+                }
+                else
+                {
+                    <h3 id="modal-title">افزودن تخفیف</h3>
+                }
+                <button type="button" class="close btn-link" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body clearfix">
+                <form asp-action="CreateOrUpdate">
+                    @if (ViewData.ModelState.IsValid.ToString() == "False")
+                    {
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                    }
+                    <input name="IsValid" type="hidden" value="@ViewData.ModelState.IsValid.ToString()" />
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="IsPublic" />
+                    <div class="row p-2 mt-2 mb-2">
+                        <div class="form-group row col-md-12">
+                            <div class="col-md-4">
+                                <label asp-for="Percent" class="control-label"></label>
+                            </div>
+                            <div class="col-md-8">
+                                <input asp-for="Percent" class="form-control" />
+                                <span asp-validation-for="Percent" class="text-danger"></span>
+                            </div>
+                        </div>
+                        @if (Model.IsPublic == true)
+                        {
+                            <div class="form-group row col-md-12">
+                                <div class="col-md-4 mt-2">
+                                    <label asp-for="Code" class="control-label"></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input id="ParentName" asp-for="Code" class="form-control" />
+                                    <span asp-validation-for="Code" class="text-danger"></span>
+                                </div>
+                            </div>
+                        }
+                        <div class="form-group row col-md-12">
+                            <div class="col-md-4 mt-2">
+                                <label asp-for="PersianStartDate" class="control-label"></label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="fa fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                    <input id="PersianStartDate" readonly asp-for="PersianStartDate" class="form-control  pwt-datepicker-input-element" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row col-md-12">
+                            <div class="col-md-4 mt-2">
+                                <label asp-for="PersianEndDate" class="control-label"></label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="fa fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                    <input id="PersianEndDate" readonly asp-for="PersianEndDate" class="form-control  pwt-datepicker-input-element" />
+                                </div>
+                                <input asp-for="IsInfiniteDiscount" />
+                                <label asp-for="IsInfiniteDiscount"></label>
+                            </div>
+                        </div>
+                        @if (Model.IsPublic == false)
+                        {
+                            <div class="form-group row col-md-12">
+                                <label asp-for="ProductIds"></label>
+                                <div class="col-md-12">
+                                    <select asp-for="ProductIds" multiple>
+                                        @foreach (var product in ViewBag.Products as IEnumerable<FaterRasanehMarket.Entities.Product>)
+                                        {
+                                            @if (Model.ProductsDiscount != null)
+                                            {
+                                                if (Model.ProductsDiscount.Select(r => r.ProductId).Contains(product.Id))
+                                                {
+                                                    <option selected value="@product.Id">@($"{product.Name}(کد کالا :{product.Id})")</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@product.Id">@($"{product.Name}(کد کالا :{product.Id})")</option>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <option value="@product.Id">@($"{product.Name}(کد کالا :{product.Id})")</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">بستن</button>
+                @if (Model.Id != 0)
+                {
+                    <button type="submit" class="btn btn-sm btn-labeled btn-success mr-1" data-save="modal">
+                        ذخیره تغییرات
+                    </button>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-sm btn-labeled btn-success mr-1" data-save="modal">
+                        افزودن اطلاعات
+                    </button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function GetReady() {
+        $('select').selectize({
+                plugins:['remove_button'],
+            delimiter: ',',
+            persist: false,
+        });
+        $('#PersianStartDate').persianDatepicker({
+       @(Model.Percent==0?"minDate: new persianDate().valueOf(),":"")
+        format: 'YYYY/MM/DD',
+        initialValueType: 'persian',
+        autoClose: true
+    });
+        $('#PersianEndDate').persianDatepicker({
+        format: 'YYYY/MM/DD',
+        initialValueType: 'persian',
+        @(Model.Percent==0?"minDate: new persianDate().valueOf(),":"")
+        @(Model.PersianEndDate == null ? "initialValue: false,":"")
+        autoClose: true
+    });
+};
+</script>
+

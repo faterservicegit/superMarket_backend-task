@@ -1,0 +1,15 @@
+﻿@model List<FaterRasanehMarket.ViewModels.Category.TreeViewCategory>
+@foreach (var category in Model)
+{
+    <li>
+        <a class="@((ViewData["Categories"] as List<FaterRasanehMarket.Entities.Category>).Select(t=>t.Id).Contains(category.id)?"active":"")" href="/Product/CategoryProducts?categoryId=@category.id">@category.title</a> <span class="down"></span>
+        <ul style="display:block;">
+            <li>
+                @if (category.subs.Count > 0)
+                {
+                    @await Html.PartialAsync("_SubMainCategories", category.subs)
+                }
+            </li>
+        </ul>
+    </li>
+}

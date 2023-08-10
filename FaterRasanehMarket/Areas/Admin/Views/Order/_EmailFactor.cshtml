@@ -1,0 +1,131 @@
+﻿@model FaterRasanehMarket.Entities.Order
+@using FaterRasanehMarket.Common
+@using FaterRasanehMarket.Services.Contracts;
+@using FaterRasanehMarket.ViewModels.Settings;
+@inject IWritableOptions<SiteSettings> writableLocations
+<h2 style="text-align:center;background-color:lavender"> با تشکر از خرید شما از فروشگاه <a href="@ViewData["Url"].ToString()" style="font-weight:bold">@writableLocations.Value.SiteInfo.Title</a> سفارش شما تایید شده است و در زمان مشخص شده ارسال خواهد شد.</h2>
+<div style=" overflow-x: auto; min-height: 0.01%;">
+    <table style="direction:rtl; font-size:16px; width: 100%; max-width: 100%; margin-bottom: 20px;background-color: transparent; border-collapse: collapse;border-spacing: 0;border: 2px solid #5d5c5c;">
+        <thead>
+            <tr >
+                <td style="background-color: azure; text-align: center; padding: 8px; vertical-align: top; border-bottom: 4px solid #5d5c5c;" colspan="5"><h3>فاکتور سفارش @Model.Id</h3></td></tr>
+            <tr>
+                <td style="text-align: center;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;">
+                    ردیف
+                </td>
+                <td style="text-align: center;padding: 8px;line-height: 1.42857143;vertical-align: top; border-top: 1px solid #ddd;">
+                    نام محصول
+                </td>
+                <td style="text-align: center;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;">
+                    تعداد
+                </td>
+                <td style="text-align: center;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;">
+                    قیمت واحد(ریال)
+                </td>
+                <td style="text-align: center;
+        padding: 8px;
+        line-height: 1.42857143;
+        vertical-align: top;
+        border-top: 1px solid #ddd;">
+                    کل(ریال)
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            @{ int i = 0;}
+            @foreach (var item in Model.OrderProducts)
+            {
+                <tr>
+                    <td style="text-align: center;
+        padding: 8px;
+        line-height: 1.42857143;
+        vertical-align: top;
+        border-top: 1px solid #ddd;">
+                        <label style="font-size:large">@(++i)</label>
+                    </td>
+                    <td style="text-align: center;
+        padding: 8px;
+        line-height: 1.42857143;
+        vertical-align: top;
+        border-top: 1px solid #ddd;">
+                        <a href="@ViewData["Url"].ToString()/Product/ProductDetails?productId=@item.Product.Id">@item.Product.Name</a><br />
+                    </td>
+                    <td style="text-align: center;
+        padding: 8px;
+        line-height: 1.42857143;
+        vertical-align: top;
+        border-top: 1px solid #ddd;">
+                        <label class="text-center">@item.Count</label>
+                    </td>
+                    <td style="text-align: center;
+        padding: 8px;
+        line-height: 1.42857143;
+        vertical-align: top;
+        border-top: 1px solid #ddd;">
+                        @item.Price.ToString("N0")
+                    </td>
+                    <td style="text-align: center;
+        padding: 8px;
+        line-height: 1.42857143;
+        vertical-align: top;
+        border-top: 1px solid #ddd;">
+                        @((item.Price * item.Count).ToString("N0"))
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" style="border: 1px solid #ddd; border-bottom: none; padding: 8px; line-height: 1.428; vertical-align: top">
+                    @if (Model.Address != null)
+                    {
+                        <strong>آدرس ارسال سفارش :</strong>
+                    }
+                    else
+                    {
+                        <strong>آدرس سفارش حذف شده است.</strong>
+                    }
+                </td>
+                <td style="text-align: right;padding: 8px;line-height: 1.42857143; vertical-align: top;border-top: 1px solid #ddd;">
+                    <strong>جمع کل:</strong>
+                </td>
+                <td style="text-align: center;padding: 8px;line-height: 1.42857143;border-top: 1px solid #ddd;">
+                    @((Model.AmountPaid-Model.ShippingCost + (Model.Discount!=null? ((Model.AmountPaid - Model.ShippingCost) * Model.Discount.Percent) / (100 - Model.Discount.Percent):0)).ToString("N0"))
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" style="border: none; border-left: 1px solid #ddd; padding: 8px; line-height: 1.42857143; vertical-align: top;">
+                    @Model.Address?.FullAddress
+                </td>
+                <td style="text-align: right;padding: 8px; line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;">
+                    <strong>تخفیف :</strong>
+                </td>
+                <td style="text-align: center;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;">
+                    @(((int)(Model.Discount!=null?((Model.AmountPaid - Model.ShippingCost) * Model.Discount?.Percent) / (100 - Model.Discount?.Percent):0)).ToString("N0"))
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" style="border: none; border-left: 1px solid #ddd; padding: 8px; line-height: 1.42857143; vertical-align: top; ">
+                    @(Model.Address!=null? $"شماره تماس : {Model.Address?.PhoneNumber}" : "")
+                </td>
+                <td style="text-align: right;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;">
+                    <strong>هزینه ارسال:</strong>
+                </td>
+                <td style="text-align: center;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;">
+                    @(Model.ShippingCost != 0 ? $"{Model.ShippingCost.ToString("N0")} " : "رایگان")
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" style="border: none; border-left:  1px solid #ddd; padding: 8px; line-height: 1.42857143; vertical-align: top;">
+                    زمان تحویل سفارش : @(Model.ShipDateTime!=null?Model.ShipDateTime.ConvertMiladiToShamsi(" HH:mm yyyy/MM/dd") :"بعد از تایید سفارش زمان تحویل مشخص می گردد")
+                </td>
+                <td style="text-align: right;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;">
+                    <strong>پرداختی :</strong>
+                </td>
+                <td style="text-align: center; padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;">
+                    @Model.AmountPaid.ToString("N0")
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

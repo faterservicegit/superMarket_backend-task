@@ -1,0 +1,93 @@
+﻿@model FaterRasanehMarket.ViewModels.VisitsStatisticsViewModel
+<div class="row col-md-12 m-auto mt-1">
+    <canvas id="VisitsChart" style="min-height:250px"></canvas>
+</div>
+<script>
+		var vconfig = {
+			type: 'line',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.Days)),
+                datasets: [{
+                    borderColor: "#2c4cff ",
+                    backgroundColor: " #95b5d5 ",
+                    pointBackgroundColor: " #95b5d5 ",
+                    pointBorderColor: " #2c4cff ",
+                    pointHoverBackgroundColor: " #95b5d5 ",
+                    pointHoverBorderColor: "#2c4cff",
+                    pointHighlightStroke: '#2c4cff',
+                    label: 'بازدید',
+                    pointRadius: 0,
+					data:@Html.Raw(Json.Serialize(Model.VisistsCount)),
+					fill: true,
+                },{
+                        borderDash: [5, 5],
+                        borderColor: " #ff5a3a",
+                        backgroundColor: "#ffd4d4",
+                        pointBackgroundColor: "#ffd4d4",
+                        pointBorderColor: "#ff5a3a",
+                        pointHoverBackgroundColor: "#ff8375",
+                        pointHoverBorderColor: "#ff5a3a",
+                        pointHighlightStroke: '#ff0000',
+                    fill: true,
+                    label: 'تعداد محصولات',
+                    pointRadius: 0,
+                        borderColor: "#ff5a3a" ,
+                    data:@Html.Raw(Json.Serialize(Model.ProductsCount)),
+                    }
+                ]
+			},
+            options: {
+				responsive: true,
+				title: {
+					display: true,
+                    text: 'آمار بازدید/محصولات ماهیانه',
+                    fontSize:20
+				},
+				tooltips: {
+                    mode: 'index',
+					intersect: false,
+				},
+				hover: {
+					mode: 'nearest',
+					intersect: true
+                },
+				scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            labelString:@Html.Raw(Json.Serialize(Model.Month)),
+                            fontSize: 25,
+                            display: true,
+                        },
+                        gridLines: {
+                            drawOnChartArea: false
+                        },
+					}],
+					yAxes: [{
+						display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'تعداد',
+                            fontSize: 25,
+                        }, gridLines: {
+                            drawOnChartArea: false
+                        },
+                        ticks: {
+                            fontSize: 18,
+                            min: 0, // it is for ignoring negative step.
+                            callback: function (value, index, values) {
+                                if (Math.floor(value) === value) {
+                                    return value;
+                                }
+                            }
+                        }
+					}]
+				}
+			}
+    };
+    Chart.defaults.global.defaultFontSize = 18;
+    window.onload = function () {
+        var vtx = document.getElementById('VisitsChart').getContext('2d');
+        window.visitChart = new Chart(vtx, vconfig);
+    };
+</script>

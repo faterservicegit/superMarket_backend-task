@@ -1,0 +1,72 @@
+﻿@model FaterRasanehMarket.ViewModels.Order.RenderOrderViewModel
+<style>
+    .clockpicker-popover .popover-title {
+        direction:ltr;
+    }
+</style>
+<link href="~/assets/plugins/dateTimePicker/css/persian-datepicker.min.css" rel="stylesheet" />
+<link href="~/assets/plugins/clockTimePicker/clockpicker.css" rel="stylesheet" />
+<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">تعیین زمان ارسال سفارش</h3>
+                <button type="button" class="close btn-link" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body clearfix">
+                <form asp-action="RenderOrder">
+                    @if (ViewData.ModelState.IsValid.ToString() == "False")
+                    {
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                    }
+                    <input name="IsValid" type="hidden" value="@ViewData.ModelState.IsValid.ToString()" />
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="OrderStatusCode" />
+                    <div class="row col-sm-12">
+                        <div class="form-group col-md-6 row">
+                            <div class="col-md-5 mt-1">
+                                <label asp-for="PersianShippingDate" class="control-label"></label>
+                            </div>
+                            <div class="col-md-7">
+                                <input readonly asp-for="PersianShippingDate" class="form-control" />
+                            </div>
+                            <span asp-validation-for="PersianShippingDate" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6 row">
+                            <div class="col-md-5 mt-1">
+                                <label asp-for="PersianShippingTime" class="control-label"></label>
+                            </div>
+                            <div class="col-md-7">
+                                <input readonly asp-for="PersianShippingTime" class="form-control"/>
+                            </div>
+                            <span asp-validation-for="PersianShippingTime" class="text-danger"></span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">بستن</button>
+                <button type="button" class="btn btn-sm btn-labeled btn-success mr-1" data-save="modal">
+                    ذخیره تغییرات
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/plugins/dateTimePicker/persian-date.min.js"></script>
+<script src="~/assets/plugins/dateTimePicker/persian-datepicker.min.js"></script>
+<script src="~/assets/plugins/clockTimePicker/clockpicker.js"></script>
+
+<script>
+    $('#PersianShippingDate').persianDatepicker({
+        minDate: new persianDate().valueOf(),
+        format: 'YYYY/MM/DD',
+        initialValueType: 'persian',
+        autoClose: true
+    });
+    $('#PersianShippingTime').clockpicker({
+        placement: 'bottom',
+        donetext: 'انتخاب',
+        autoclose: true,
+    });
+</script>

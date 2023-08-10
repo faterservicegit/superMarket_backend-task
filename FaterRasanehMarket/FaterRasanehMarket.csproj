@@ -1,0 +1,266 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="ViewComponents\DataStatistics.cs" />
+    <Compile Remove="ViewComponents\LastComments.cs" />
+    <Compile Remove="ViewComponents\UserPlayedVideos.cs" />
+    <Compile Remove="ViewComponents\VisitsStatistics.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.5" />
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="3.9.7">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.3" />
+    <PackageReference Include="NPOI" Version="2.5.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FaterRasanehMarket.IocConfig\FaterRasanehMarket.IocConfig.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="wwwroot\Data\Brand\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Shared\Components\CategoryList\Default.cshtml" />
+    <None Include="Views\Shared\Components\VisitsStatistics\Default.cshtml" />
+    <None Include="wwwroot\assets\plugins\Rating\js\locales\ar.js" />
+    <None Include="wwwroot\assets\plugins\Rating\js\locales\bn.js" />
+    <None Include="wwwroot\assets\plugins\Rating\js\locales\de.js" />
+    <None Include="wwwroot\assets\plugins\Rating\js\locales\es.js" />
+    <None Include="wwwroot\assets\plugins\Rating\js\locales\fa.js" />
+    <None Include="wwwroot\assets\plugins\Rating\js\locales\fr.js" />
+    <None Include="wwwroot\assets\plugins\Rating\js\locales\gr.js" />
+    <None Include="wwwroot\assets\plugins\Rating\js\locales\it.js" />
+    <None Include="wwwroot\assets\plugins\Rating\js\locales\kk.js" />
+    <None Include="wwwroot\assets\plugins\Rating\js\locales\ko.js" />
+    <None Include="wwwroot\assets\plugins\Rating\js\locales\LANG.js" />
+    <None Include="wwwroot\assets\plugins\Rating\js\locales\pl.js" />
+    <None Include="wwwroot\assets\plugins\Rating\js\locales\pt-BR.js" />
+    <None Include="wwwroot\assets\plugins\Rating\js\locales\ro.js" />
+    <None Include="wwwroot\assets\plugins\Rating\js\locales\ru.js" />
+    <None Include="wwwroot\assets\plugins\Rating\js\locales\tr.js" />
+    <None Include="wwwroot\assets\plugins\Rating\js\locales\ua.js" />
+    <None Include="wwwroot\assets\plugins\Rating\js\locales\zh.js" />
+    <None Include="wwwroot\assets\plugins\Rating\js\star-rating.js" />
+    <None Include="wwwroot\assets\plugins\Rating\js\star-rating.min.js" />
+    <None Include="wwwroot\assets\plugins\Rating\themes\krajee-fas\theme.js" />
+    <None Include="wwwroot\assets\plugins\Rating\themes\krajee-fas\theme.min.js" />
+    <None Include="wwwroot\assets\plugins\Rating\themes\krajee-fa\theme.js" />
+    <None Include="wwwroot\assets\plugins\Rating\themes\krajee-fa\theme.min.js" />
+    <None Include="wwwroot\assets\plugins\Rating\themes\krajee-svg\theme.js" />
+    <None Include="wwwroot\assets\plugins\Rating\themes\krajee-svg\theme.min.js" />
+    <None Include="wwwroot\assets\plugins\Rating\themes\krajee-uni\theme.js" />
+    <None Include="wwwroot\assets\plugins\Rating\themes\krajee-uni\theme.min.js" />
+    <None Include="wwwroot\assets\plugins\clockTimePicker\clockpicker.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\browser\signalr.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\browser\signalr.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\browser\signalr.min.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\browser\signalr.min.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\AbortController.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\AbortController.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\browser-index.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\browser-index.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\DefaultHttpClient.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\DefaultHttpClient.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\DefaultReconnectPolicy.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\DefaultReconnectPolicy.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\EmptyNodeHttpClient.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\EmptyNodeHttpClient.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\Errors.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\Errors.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\HandshakeProtocol.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\HandshakeProtocol.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\HttpClient.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\HttpClient.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\HttpConnection.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\HttpConnection.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\HubConnection.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\HubConnection.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\HubConnectionBuilder.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\HubConnectionBuilder.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\IConnection.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\IConnection.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\IHttpConnectionOptions.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\IHttpConnectionOptions.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\IHubProtocol.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\IHubProtocol.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\ILogger.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\ILogger.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\index.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\index.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\IRetryPolicy.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\IRetryPolicy.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\ITransport.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\ITransport.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\JsonHubProtocol.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\JsonHubProtocol.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\Loggers.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\Loggers.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\LongPollingTransport.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\LongPollingTransport.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\NodeHttpClient.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\NodeHttpClient.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\Polyfills.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\Polyfills.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\ServerSentEventsTransport.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\ServerSentEventsTransport.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\Stream.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\Stream.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\Subject.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\Subject.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\TextMessageFormat.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\TextMessageFormat.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\Utils.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\Utils.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\WebSocketTransport.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\WebSocketTransport.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\XhrHttpClient.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\cjs\XhrHttpClient.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\AbortController.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\AbortController.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\browser-index.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\browser-index.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\DefaultHttpClient.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\DefaultHttpClient.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\DefaultReconnectPolicy.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\DefaultReconnectPolicy.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\EmptyNodeHttpClient.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\EmptyNodeHttpClient.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\Errors.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\Errors.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\HandshakeProtocol.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\HandshakeProtocol.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\HttpClient.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\HttpClient.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\HttpConnection.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\HttpConnection.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\HubConnection.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\HubConnection.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\HubConnectionBuilder.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\HubConnectionBuilder.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\IConnection.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\IConnection.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\IHttpConnectionOptions.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\IHttpConnectionOptions.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\IHubProtocol.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\IHubProtocol.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\ILogger.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\ILogger.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\index.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\index.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\IRetryPolicy.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\IRetryPolicy.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\ITransport.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\ITransport.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\JsonHubProtocol.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\JsonHubProtocol.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\Loggers.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\Loggers.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\LongPollingTransport.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\LongPollingTransport.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\NodeHttpClient.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\NodeHttpClient.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\Polyfills.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\Polyfills.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\ServerSentEventsTransport.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\ServerSentEventsTransport.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\Stream.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\Stream.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\Subject.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\Subject.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\TextMessageFormat.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\TextMessageFormat.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\Utils.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\Utils.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\WebSocketTransport.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\WebSocketTransport.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\XhrHttpClient.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\esm\XhrHttpClient.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\webworker\signalr.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\webworker\signalr.js.map" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\webworker\signalr.min.js" />
+    <None Include="wwwroot\assets\plugins\signalr\dist\webworker\signalr.min.js.map" />
+    <None Include="wwwroot\assets\plugins\toasty\toasty.js" />
+    <None Include="wwwroot\Main\js\notification\notifications.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\dist\esm\AbortController.d.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\dist\esm\browser-index.d.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\dist\esm\DefaultHttpClient.d.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\dist\esm\DefaultReconnectPolicy.d.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\dist\esm\EmptyNodeHttpClient.d.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\dist\esm\Errors.d.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\dist\esm\HandshakeProtocol.d.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\dist\esm\HttpClient.d.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\dist\esm\HttpConnection.d.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\dist\esm\HubConnection.d.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\dist\esm\HubConnectionBuilder.d.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\dist\esm\IConnection.d.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\dist\esm\IHttpConnectionOptions.d.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\dist\esm\IHubProtocol.d.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\dist\esm\ILogger.d.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\dist\esm\index.d.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\dist\esm\IRetryPolicy.d.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\dist\esm\ITransport.d.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\dist\esm\JsonHubProtocol.d.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\dist\esm\Loggers.d.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\dist\esm\LongPollingTransport.d.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\dist\esm\NodeHttpClient.d.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\dist\esm\Polyfills.d.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\dist\esm\ServerSentEventsTransport.d.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\dist\esm\Stream.d.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\dist\esm\Subject.d.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\dist\esm\TextMessageFormat.d.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\dist\esm\Utils.d.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\dist\esm\WebSocketTransport.d.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\dist\esm\XhrHttpClient.d.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\src\AbortController.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\src\browser-index.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\src\DefaultHttpClient.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\src\DefaultReconnectPolicy.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\src\EmptyNodeHttpClient.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\src\Errors.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\src\HandshakeProtocol.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\src\HttpClient.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\src\HttpConnection.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\src\HubConnection.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\src\HubConnectionBuilder.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\src\IConnection.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\src\IHttpConnectionOptions.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\src\IHubProtocol.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\src\ILogger.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\src\index.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\src\IRetryPolicy.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\src\ITransport.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\src\JsonHubProtocol.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\src\Loggers.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\src\LongPollingTransport.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\src\NodeHttpClient.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\src\Polyfills.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\src\ServerSentEventsTransport.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\src\Stream.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\src\Subject.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\src\TextMessageFormat.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\src\Utils.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\src\WebSocketTransport.ts" />
+    <TypeScriptCompile Include="wwwroot\assets\plugins\signalr\src\XhrHttpClient.ts" />
+  </ItemGroup>
+
+</Project>

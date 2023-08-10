@@ -1,0 +1,38 @@
+﻿@model List<FaterRasanehMarket.Entities.Address>
+@foreach (var address in Model)
+{
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title"><input type="radio" name="AddressId" value="@address.Id" @(address.IsDefualt == true ? "checked" : "") style="padding-left:1rem"/>  <i class="fa fa-book"></i> @address.Title</h4>
+        </div>
+        <div class="panel-body">
+            <fieldset  class="required">
+                <div class="form-group ">
+                    <label for="input-payment-address-1" class="control-label">آدرس </label>
+                    <label type="text" class="form-control" >@address.FullAddress</label>
+                </div>
+                <div class="form-group">
+                    <label for="input-payment-city" class="control-label">شماره تماس</label>
+                    <label type="text" class="form-control" >@address.PhoneNumber</label>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+}
+@if(Model.Count==0)
+{
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title"><i class="fa fa-book"></i> آدرس</h4>
+        </div>
+        <div class="panel-body">
+            <fieldset class="required">
+                <div class="form-group text-center">
+                    <a href="/Account/Profile"><img style="max-height:170px" title="افزودن آدرس" src="~/Main/image/add_address.png"/></a>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+}
+
+

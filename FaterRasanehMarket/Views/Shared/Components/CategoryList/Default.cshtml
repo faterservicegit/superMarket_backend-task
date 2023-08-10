@@ -1,0 +1,17 @@
+﻿@model List<FaterRasanehMarket.ViewModels.Category.TreeViewCategory>
+<div class="dropdown-menu">
+    <ul>
+        @foreach (var item in Model.OrderBy(t => t.title))
+        {
+        <li>
+            <a href="/Product/CategoryProducts?categoryId=@item.id">
+                @item.title @if (item.subs.Count > 0){<span>&rsaquo;</span>}
+            </a>
+            @if (item.subs.Count() != 0)
+            {
+                @await Html.PartialAsync("_SubCategories", item.subs)
+            }
+        </li>
+        }
+    </ul>
+</div>

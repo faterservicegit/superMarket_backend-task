@@ -1,0 +1,39 @@
+﻿<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">افزودن یا آپدیت کالا با فایل اکسل</h3>
+                <button type="button" class="close btn-link" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body clearfix">
+                <form asp-action="AddProductsWithExcel">
+                    @if (ViewData["Alert"] != null)
+                    {
+                        <div class="alert alert-danger">@ViewData["Alert"].ToString()</div>
+                    }
+                    <input name="IsValid" type="hidden" value="@(ViewData["Alert"]!=null?"False":"True")" />
+                        <div class="form-group col-sm-12 callout callout-info">
+                            <p>لطفا فایل اکسل با فرمت  xlsx را ارسال نمایید</p>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input  accept=".xlsx" onchange="fileUploader(this)" type="file" class="custom-file-input" name="excelFile" required>
+                                    <label id="jsonLabel" class="custom-file-label" for="jsonInputFile">انتخاب فایل</label>
+                                </div>
+                            </div>
+                        </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">بستن</button>
+                    <button type="button" class="btn btn-sm btn-labeled btn-success mr-1" data-save="modal">
+                        افزودن اطلاعات
+                    </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function fileUploader(uploader) {
+        $("#jsonLabel")[0].textContent = uploader.value.split("\\").pop();
+    }
+</script>

@@ -1,0 +1,110 @@
+﻿@model FaterRasanehMarket.ViewModels.Category.CategoryProductsViewModel
+<link href="~/assets/plugins/Selectize/dist/css/selectize.default.css" rel="stylesheet" />
+<div id="container">
+    <div class="container">
+        <!-- Breadcrumb End-->
+        <div class="row">
+            <!--Left Part Start -->
+            <aside id="column-left" class="col-sm-3 hidden-xs">
+                <h3 class="subtitle">دسته ها</h3>
+                <div class="box-category">
+                    <ul id="cat_accordion">
+                        @await Component.InvokeAsync("CategoryList", true)
+                    </ul>
+                </div>
+                @await Component.InvokeAsync("BestSellingProducts", false)
+            </aside>
+            <!--Left Part End -->
+            <!--Middle Part Start-->
+            <div id="content" class="col-sm-9">
+                <h1 class="title">
+                    @Model.CategoryName
+                </h1>
+                <div class="product-filter">
+                    <div class="row">
+                        <div class="col-md-3 col-sm-4">
+                            <div class="btn-group">
+                                <button type="button" id="list-view" class="btn btn-default" data-toggle="tooltip" title="List"><i class="fa fa-th-list"></i></button>
+                                <button type="button" id="grid-view" class="btn btn-default" data-toggle="tooltip" title="Grid"><i class="fa fa-th"></i></button>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 text-right">
+                            <label class="control-label" for="input-sort" style="padding-top:0.5rem">     مرتب سازی   </label>
+                        </div>
+                        <div class="col-md-3 col-sm-2 text-right" style="line-height:15px">
+                            <select class="selectize-control" id="input-sort" style="line-height:15px">
+                                <option value="AddDateTime desc" selected="selected">جدیدترین</option>
+                                <option value="OrderCount desc">پرفروش ترین</option>
+                                <option value="LikesPrecent desc">محبوب ترین</option>
+                                <option value="VisitCount desc">پربازدید ترین</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-1 text-right">
+                            <label class="control-label" for="input-limit" style="padding-top:0.5rem">نمایش</label>
+                        </div>
+                        <div class="col-sm-2 text-right">
+                            <select class="selectize-control no-border" id="input-limit">
+                                <option value="20" selected="selected">20</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="75">75</option>
+                                <option value="100">100</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div id="ProductPaginate" class="row products-category">
+                    @await Html.PartialAsync("_CategoryProductsPagination", Model.Products)
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 text-right">
+                        <div id="page">
+                            <ul class="pagination"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Middle Part End -->
+        </div>
+    </div>
+</div>
+<script src="~/assets/plugins/Selectize/dist/js/standalone/selectize.min.js"></script>
+<script src="~/Main/js/pagination.min.js"></script>
+<script>
+    var limit = $("#input-limit").val();
+    var sort = $("#input-sort").val();
+    var page = 1;
+        var $sortSelect = $('#input-sort').selectize({
+            persist: false,
+            create: false,
+        onChange: function (obj) {
+            sort = $("#input-sort").val();
+            updateProducts();
+        }
+    });
+        var $limitSelect = $('#input-limit').selectize({
+            persist: false,
+            create: false,
+        onChange: function (obj) {
+            limit = $("#input-limit").val();
+            updateProducts();
+        }
+    });
+    $('#page').Pagination({
+        size: @Model.ProductsCount,
+        limit: limit,
+    }, function (obj) {
+            page = obj.page;
+            updateProducts();
+    });
+    function updateProducts() {
+        var obj = $('#page');
+        var offset = (page - 1) * 5;
+        $.ajax({
+            url: '/Product/GetCategoryProductsPagination?offset=' + offset + '&&limit=' + limit + '&&orderBy=' + sort + '&&categoryId=' +@Model.CategoryId,
+        }).done(function (result) {
+            $("#ProductPaginate").html(result);
+        });
+    };
+</script>

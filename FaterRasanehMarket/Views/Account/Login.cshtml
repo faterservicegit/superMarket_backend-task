@@ -1,0 +1,78 @@
+﻿@model FaterRasanehMarket.ViewModels.Identity.SignInViewModel
+@using FaterRasanehMarket.Services.Contracts;
+@using FaterRasanehMarket.ViewModels.Settings;
+@inject IWritableOptions<SiteSettings> writableLocations
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" href="/assets/login/images/bg-01.jpg" />
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/assets/login/css/util.css">
+    <link rel="stylesheet" type="text/css" href="/assets/login/css/main.css">
+    <!--===============================================================================================-->
+
+</head>
+<body>
+    <div class="limiter">
+        <div class="container-login100">
+            <div class="overlay">
+                <div class="wrap-login100">
+                    @if (ViewData.ModelState.IsValid.ToString() == "False")
+                    {
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                    }
+                    <div class="login100-form-title" style="background-image: url(/assets/login/images/Supermarket.jpg);">
+                        <span class="login100-form-title-1">
+                            @writableLocations.Value.SiteInfo.Title
+                        </span>
+                    </div>
+
+                    <form class="login100-form validate-form" asp-action="Login" method="post">
+                        <input type="hidden" asp-for="ReturnUrl" />
+                        <div class="wrap-input100 validate-input m-b-26" data-validate="نام کاربری را وارد کنید">
+                            <input class="input100" type="text" asp-for="UserName" placeholder="    نام کاربری">
+                            <span class="focus-input100"></span>
+                        </div>
+                        <div class="wrap-input100 validate-input m-b-18" data-validate="کلمه عبور را وارد کنید.">
+                            <input class="input100" type="password" asp-for="Password" placeholder="    کلمه عبور">
+                            <span class="focus-input100"></span>
+                        </div>
+                        <div class="flex-sb-m w-full p-b-30">
+                            <div class="contact100-form-checkbox">
+                                <input asp-for="RememberMe" class="input-checkbox100" id="ckb1" type="checkbox">
+                                <label asp-for="RememberMe" class="label-checkbox100" for="ckb1">
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="container-login100-form-btn">
+                            <button class="login100-form-btn">
+                                ورود
+                            </button>
+                        </div>
+                        <div class="text-center" style="width:100%">
+                            <a href="/Register?ForgotPassword=true"> فراموشی کلمه عبور</a>
+                            <br />
+                            <a href="/Register">ثبت نام</a>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!--===============================================================================================-->
+    <script src="/assets/plugins/jquery/jquery.min.js"></script>
+    <script src="/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="/assets/login/js/main.js"></script>
+</body>
+</html>

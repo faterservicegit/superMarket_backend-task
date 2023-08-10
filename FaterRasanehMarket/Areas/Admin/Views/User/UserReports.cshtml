@@ -1,0 +1,73 @@
+﻿@model FaterRasanehMarket.ViewModels.Identity.UserReportsViewModel
+@{
+    TempData["State"] = "user";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+    <div class="content-wrapper">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0 text-dark">گزارشات کاربران</h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-left">
+                            <li class="breadcrumb-item">مدیریت کاربران</li>
+                            <li class="breadcrumb-item active">گزارشات</li>
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <section class="content">
+            <div class="card shadow w-100">
+                <div class="card-body">
+                    <div class="col-md-12 row form-group">
+                        <select id="select-user" class="col-md-12" type="select-one" autocomplete="off" placeholder="کاربر را انتخاب کنید.">
+                            @if (ViewBag.SelectedUser == null)
+                            {
+                                <option value="" selected disabled hidden>کاربر را انتخاب کنید.</option>
+                                @foreach (var user in ViewBag.Users)
+                                {
+                                    <option value="@user.Id">@user.FirstName @user.LastName (@user.UserName)</option>
+                                }
+                            }
+                            else
+                            {
+                                @foreach (var user in ViewBag.Users)
+                                {
+                                    @if (ViewBag.SelectedUser == user.Id)
+                                    {
+                                        <option selected value="@user.Id">@user.FirstName @user.LastName (@user.UserName)</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@user.Id">@user.FirstName @user.LastName (@user.UserName)</option>
+                                    }
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div id="user-report" class="col-md-12 mt-2">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+    $(document).ready(function () {
+        (function () {
+            var xhr;
+            var select_user, $select_user;
+            $select_user = $('#select-user').selectize({
+                onChange: function (value) {
+                    if (!value.length) return;
+                    $("#user-report").load('@Url.Action("UserReportDetails")?userId=' + value);
+                }
+            });
+                select_user = $select_user[0].selectize;
+                    $("#user-report").load('@Url.Action("UserReportDetails")?userId=' + '@ViewBag.SelectedUser');
+        })();
+    });
+    </script>

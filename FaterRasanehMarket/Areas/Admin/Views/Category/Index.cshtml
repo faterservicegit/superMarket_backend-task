@@ -1,0 +1,32 @@
+﻿
+@{
+    TempData["State"] = "product";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+    <div class="content-wrapper">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0 text-dark">مدیریت دسته بندی ها</h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-left">
+                            <li class="breadcrumb-item">مدیریت کالا ها</li>
+                            <li class="breadcrumb-item active">مدیریت دسته بندی ها</li>
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <section class="content">
+            <div class="card shadow  w-100">
+                <div class="card-body">
+                    <form action="@Url.Action("Index")">
+                        @await Html.PartialAsync("_CategoryTable")
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>

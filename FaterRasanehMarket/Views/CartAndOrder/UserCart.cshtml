@@ -1,0 +1,112 @@
+﻿@using FaterRasanehMarket.Services.Contracts;
+@using FaterRasanehMarket.ViewModels.Settings;
+@inject IWritableOptions<SiteSettings> writableLocations
+@model FaterRasanehMarket.ViewModels.CartAndOrders.CartViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="container">
+    <div class="container">
+        <!-- Breadcrumb Start-->
+        <ul class="breadcrumb">
+            <li><a href="/Home"><i class="fa fa-home"></i></a></li>
+            <li><a href="/CartAndOrder/UserCart">سبد خرید</a></li>
+        </ul>
+        <!-- Breadcrumb End-->
+        <div class="row">
+            <!--Middle Part Start-->
+            @if (!writableLocations.Value.OrderSettings.IsTakingOrder)
+            {
+                <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i>  با عرض پوزش فروشگاه درحال حاظر سفارش نمی گیرد</div>
+
+            }
+            else
+            {
+                @if (Model.OrderDetails.Count() > 0)
+                {
+                    <div id="content" class="col-sm-12">
+                        <h1 class="title">سبد خرید</h1>
+                        @if (ViewBag.CartUpdated != null)
+                        {
+                            <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> @ViewBag.CartUpdated</div>
+                        }
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <td class="text-center">ردیف</td>
+                                        <td class="text-center">تصویر</td>
+                                        <td class="text-center">نام محصول</td>
+                                        <td class="text-center">تعداد</td>
+                                        <td class="text-center">قیمت واحد (ریال)</td>
+                                        <td class="text-center">کل (ریال)</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{int i = 0; }
+                                    @foreach (var item in Model.OrderDetails)
+                                    {
+                                        <tr>
+                                            <td class="text-center" style="font-size:x-large">@(++i)</td>
+                                            <td class="text-center"><a href="@Url.Action("ProductDetails", "Product", new { productId = item.Product.Id })"><img src="/Data/Product/Icon/@item.Product.Icon" alt="@item.Product.Name" title="@item.Product.Name" class="img-thumbnail cart-products" /></a></td>
+                                            <td class="text-center">
+                                                <a href="@Url.Action("ProductDetails", "Product", new { productId = item.Product.Id })">@item.Product.Name</a><br />
+                                            </td>
+                                            <td class="text-center">
+                                                <div class="input-group btn-block quantity">
+                                                    <input type="number" id="@($"quantity{i}")" value="@item.Count" size="1" min="0" max="@item.Product.Count" class="form-control" />
+                                                    <span class="input-group-btn">
+                                                        <button type="submit" data-toggle="tooltip" title="بروزرسانی" class="btn btn-primary" onclick="updateCart(this)" row="@i" url="@Url.Action("RemoveOrUpdateFromCart", "CartAndOrder", new { productId = item.Product.Id })"><i class="fa fa-sync"></i></button>
+                                                        <button type="button" data-toggle="tooltip" title="حذف" class="btn btn-danger" onClick="removeFromCart(this, true)" row="@i" url="@Url.Action("RemoveOrUpdateFromCart", "CartAndOrder", new { productId = item.Product.Id })"><i class="fa fa-times-circle"></i></button>
+                                                    </span>
+                                                </div>
+                                            </td>
+                                            <td class="text-center">
+                                                @item.Price.ToString("N0")
+                                                <br />
+                                                @if (item.Price != item.Product.Price)
+                                                {
+                                                    <small>تخفیف : @((item.Product.Price - item.Price).ToString("N0")) </small>
+                                                }
+                                            </td>
+                                            <td class="text-center">@((item.Price * item.Count).ToString("N0"))</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 col-sm-offset-8">
+                                <table class="table table-hover">
+                                    <tr>
+                                        <td class="text-right"><strong>جمع کل:</strong></td>
+                                        <td class="text-right">@Model.OrderPrice.ToString("N0")</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right"><strong>هزینه ارسال:</strong></td>
+                                        <td class="text-right">@(Model.ShippingCost != 0 ? $"{Model.ShippingCost.ToString("N0")}" : "رایگان")</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right"><strong>کل :</strong></td>
+                                        <td class="text-right">@Model.TotalPrice.ToString("N0")</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="buttons">
+                            <div class="pull-left"><a href="/Home" class="btn btn-default">ادامه خرید</a></div>
+                            <div class="pull-right"><a href="/CartAndOrder/CheckOut" class="btn btn-primary">تسویه حساب</a></div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-info"><i class="fa fa-exclamation-circle"></i> سبد خرید شما خالی است</div>
+                }
+            }
+            <!--Middle Part End -->
+        </div>
+    </div>
+</div>
+

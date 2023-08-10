@@ -1,0 +1,40 @@
+﻿
+@{
+    TempData["State"] = "order";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">مدیریت سفارشات</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-left">
+                        <li class="breadcrumb-item">سفارشات</li>
+                        <li class="breadcrumb-item active">مدیریت سفارشات</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <section class="content">
+        <div class="card shadow  w-100">
+            <div class="card-body">
+                <form action="@Url.Action("Index")">
+                    @await Html.PartialAsync("_OrderTable")
+                </form>
+            </div>
+        </div>
+    </section>
+</div>
+@*@if (ViewBag.NewOrdersAlert != null)
+{
+    <script>
+        document.addEventListener("DOMContentLoaded", setTimeout(function () {
+            toast.success('<i class="fa fa-check fa-2x"></i> @ViewBag.NewOrdersAlert');
+        },1000));
+    </script>
+}*@

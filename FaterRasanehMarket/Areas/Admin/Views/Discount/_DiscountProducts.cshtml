@@ -1,0 +1,105 @@
+﻿@model List<FaterRasanehMarket.ViewModels.Product.ProductViewModel>
+<link href="~/assets/plugins/datatables/dataTables.bootstrap4.css" rel="stylesheet" />
+<script src="~/assets/plugins/datatables/jquery.dataTables.js"></script>
+<script href="~/assets/plugins/datatables/dataTables.bootstrap4.js"></script>
+<style>
+    @@media only screen and (min-width: 600px) {
+        .modal-dialog {
+            max-width: 700px !important;
+        }
+    }
+    table.dataTable {
+        border-collapse: separate !important;
+        max-height: 50px;
+    }
+
+    .paginate_button {
+        color: black;
+        float: left;
+        padding: 8px 16px;
+        text-decoration: none;
+        cursor: pointer;
+        border: 1px solid #ddd;
+    }
+
+    .current {
+        background-color: dodgerblue;
+        color: white;
+    }
+
+    .table.dataTable td, table.dataTable th {
+        text-align: center;
+    }
+
+    label {
+        direction: rtl;
+    }
+</style>
+<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>کالاهای شامل این تخفیف</h5>
+                <button type="button" class="close btn-link" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body clearfix">
+                <table class="table table-hover" style="height: 200px; overflow: auto;" id="myTable">
+                    <thead>
+                        <tr>
+                            <th>کد کالا</th>
+                            <th>نام</th>
+                            <th>قیمت</th>
+                            @if (ViewBag.IsExpired == false)
+                            {
+                                <th>قیمت با تخفیف</th>
+                            }
+                            <th>موجودی</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var product in Model)
+                        {
+                        <tr>
+                            <td>@product.Id</td>
+                            <td>@product.Name</td>
+                            <td>@product.Price</td>
+                            @if (ViewBag.IsExpired == false)
+                            {
+                                <td>@product.DiscountedAmount</td>
+                            }
+                            @if (product.IsDeleted == true)
+                            {
+                                <td>محصول حذف شده است</td>
+
+                            }
+                            else
+                            {
+                                <td>@product.Count</td>
+                            }
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#myTable').DataTable({
+        "language": {
+            "paginate": {
+                "next": "بعدی",
+                "previous": "قبلی"
+            }
+        },
+        "info": false,
+        "paging": true,
+        "lengthChange": false,
+        "searching": true,
+        "ordering": false,
+        "autoWidth": false,
+        "pageLength": 7,
+    });
+</script>

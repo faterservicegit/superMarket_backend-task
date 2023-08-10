@@ -1,0 +1,85 @@
+﻿@model FaterRasanehMarket.ViewModels.Category.CategoryViewModel
+<link href="~/assets/plugins/comboTreePlugin/comboTreePlugin.css" rel="stylesheet" />
+<script src="~/assets/plugins/comboTreePlugin/comboTreePlugin.js"></script>
+<style>
+    @@media only screen and (min-width: 500px) {
+        .modal-dialog {
+            max-width: 500px !important;
+        }
+    }
+</style>
+<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                @if (Model.Id != 0)
+                {
+                    <h3 id="modal-title">ویرایش اطلاعات دسته بندی</h3>
+                }
+                else
+                {
+                    <h3 id="modal-title">افزودن دسته بندی جدید</h3>
+                }
+                <button type="button" class="close btn-link" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body clearfix">
+                <form asp-action="CreateOrUpdate">
+                    @if (ViewData.ModelState.IsValid.ToString() == "False")
+                    {
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                    }
+
+                    <input name="IsValid" type="hidden" value="@ViewData.ModelState.IsValid.ToString()" />
+                    <input type="hidden" asp-for="Id" />
+                    <div class="row p-2 mt-2 mb-2">
+                        <div class="form-group row col-md-12">
+                            <div class="col-md-4">
+                                <label asp-for="Name" class="control-label"></label>
+                            </div>
+                            <div class="col-md-8">
+                                <input asp-for="Name" class="form-control" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row col-md-12">
+                            <div class="col-md-4">
+                                <label asp-for="ParentName" class="control-label"></label>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="ParentName" asp-for="ParentName" class="form-control" />
+                                <span asp-validation-for="ParentName" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">بستن</button>
+                @if (Model.Id != 0)
+                {
+                    <button type="submit" class="btn btn-sm btn-labeled btn-success mr-1" data-save="modal">
+                        ذخیره تغییرات
+                    </button>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-sm btn-labeled btn-success mr-1" data-save="modal">
+                        افزودن اطلاعات
+                    </button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function GetReady() {
+		comboTree2 = $('#ParentName').comboTree({
+			source : @Html.Raw(Json.Serialize(ViewBag.Categories)),
+			isMultiple: false
+		});
+    };
+</script>
+

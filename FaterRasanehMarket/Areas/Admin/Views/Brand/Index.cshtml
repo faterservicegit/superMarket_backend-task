@@ -1,0 +1,31 @@
+﻿
+@{
+    TempData["State"] = "product";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">مدیریت برندها</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-left">
+                        <li class="breadcrumb-item">کالا ها</li>
+                        <li class="breadcrumb-item active">مدیریت برندها</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <section class="content">
+        <div class="card shadow  w-100">
+            <div class="card-body">
+                <form action="@Url.Action("Index")">
+                    @await Html.PartialAsync("_BrandTable")
+                </form>
+            </div>
+        </div>
+    </section>
+</div>

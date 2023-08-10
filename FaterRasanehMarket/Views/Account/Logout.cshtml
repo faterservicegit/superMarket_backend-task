@@ -1,0 +1,26 @@
+﻿@{Layout = null; }
+<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4> <i class="fa fa-lock"></i> خروج </h4>
+            </div>
+            <div class="modal-body clearfix">
+                <p>
+                    آیا می خواهید از حساب کاربری خود خارج شوید؟
+                    <br />
+                </p>
+            </div>
+            <div class="modal-footer">
+                <form action="/LogOut"  method="post">
+                    <button type="submit" class="btn btn-sm btn-labeled btn-success">
+                        بله
+                    </button>
+                </form>
+                <button type="button" class="btn btn-sm btn-labeled  btn-danger  mr-1" data-dismiss="modal">
+                    خیر
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,91 @@
+﻿@model FaterRasanehMarket.ViewModels.Profile.AddressViewModel
+<style>
+    .modal-body {
+        position: relative;
+        padding: 50px;
+        padding-top:15px !important;
+    }
+    @@media only screen and (min-width: 700px) {
+        .modal-dialog {
+            max-width: 440px !important;
+        }
+    }
+
+    textarea {
+        overflow: auto;
+        resize: none;
+        min-height: 50px
+    }
+</style>
+<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                @if (Model.Id != 0)
+                {
+                    <h4 id="modal-title">ویرایش آدرس</h4>
+                }
+                else
+                {
+                    <h4 id="modal-title">افزودن آدرس جدید</h4>
+                }
+            </div>
+            <div class="modal-body clearfix">
+                <form asp-action="CreateOrUpdateAddress" asp-controller="Account" >
+                    @if (ViewData.ModelState.IsValid.ToString() == "False")
+                    {
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                    }
+                    <input name="IsValid" type="hidden" value="@ViewData.ModelState.IsValid.ToString()" />
+                    <input type="hidden" asp-for="Id" />
+                    <div class="row">
+                        <div class="form-group row">
+                            <div class="col-md-4 mt-1">
+                                <label asp-for="Title" class="control-label"></label>
+                            </div>
+                            <div class="col-md-8">
+                                <input asp-for="Title" class="form-control" />
+                            </div>
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4 mt-1">
+                                <label asp-for="PhoneNumber" class="control-label"></label>
+                            </div>
+                            <div class="col-md-8">
+                                <input asp-for="PhoneNumber" class="form-control" />
+                            </div>
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-12 mt-1">
+                                <label asp-for="FullAddress" class="control-label"></label>
+                            </div>
+                            <div class="col-md-12 ">
+                                <textarea asp-for="FullAddress" class="form-control">@Model.FullAddress</textarea>
+                                <span asp-validation-for="FullAddress" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">بستن</button>
+                @if (Model.Id != 0)
+                {
+                    <button type="button" class="btn btn-sm btn-labeled btn-success mr-1" data-save="modal">
+                        ذخیره تغییرات
+                    </button>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-sm btn-labeled btn-success mr-1" data-save="modal">
+                        افزودن اطلاعات
+                    </button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
